@@ -1,0 +1,129 @@
+{
+	"info": {
+		"_postman_id": "b5e07a48-32d6-4e58-8443-2612544bc38c",
+		"name": "EY",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POST New Username",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:3000/profile/new?username=jon2&first_name=Jon&last_name=Smith&age=4",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"profile",
+						"new"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "jon2"
+						},
+						{
+							"key": "first_name",
+							"value": "Jon"
+						},
+						{
+							"key": "last_name",
+							"value": "Smith"
+						},
+						{
+							"key": "age",
+							"value": "4"
+						}
+					]
+				},
+				"description": "Creates the Profile entity"
+			},
+			"response": []
+		},
+		{
+			"name": "GET Valid UUID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:3000/profile/2d023790-b78a-11e8-8188-910830c29a63",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"profile",
+						"2d023790-b78a-11e8-8188-910830c29a63"
+					]
+				},
+				"description": "Retrieves username, first name, last name, age if the user exists in the data source"
+			},
+			"response": []
+		},
+		{
+			"name": "POST Same Username",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:3000/profile/new?username=chirag1&first_name=Chirag&last_name=Test&age=44",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"profile",
+						"new"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "chirag1"
+						},
+						{
+							"key": "first_name",
+							"value": "Chirag"
+						},
+						{
+							"key": "last_name",
+							"value": "Test"
+						},
+						{
+							"key": "age",
+							"value": "44"
+						}
+					]
+				},
+				"description": "Creates the Profile entity"
+			},
+			"response": []
+		},
+		{
+			"name": "GET Invalid UUID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:3000/profile/fdsafsadf",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"profile",
+						"fdsafsadf"
+					]
+				},
+				"description": "Retrieves username, first name, last name, age if the user exists in the data source"
+			},
+			"response": []
+		}
+	]
+}
