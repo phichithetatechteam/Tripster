@@ -1,28 +1,47 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {Map, InfoWindow, Marker, GoogleApiWrapper, Polygon, Polyline} from 'google-maps-react';
+import React from 'react'
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+export class MapContainer extends React.Component {
+    render() {
+        console.log(this.props.google)
+        // const triangleCoords = [
+        //     {lat: 37.759703, lng: -122.428093},
+        //     {lat: 37.7614169, lng: -122.4240931},
+        //
+        // ];
+        const triangleCoords = [
+            {lat: 37.759703, lng: -122.428093},
+            {lat: 37.7612896, lng: -122.4283997},
+            {lat: 37.7615595, lng: -122.4241079},
+            {lat: 37.7614169, lng: -122.4240931},
+
+        ];
+
+        return (
+            <div>
+                <button>HI</button>
+                <p>We are traveling from Delores Park to Tartine Bakery</p>
+                <Map google={this.props.google} zoom={14}>
+                    <Marker
+                        name={'Dolores park'}
+                        position={{lat: 37.759703, lng: -122.428093}} />
+                    <Marker
+                        name={'Tartine Bakery'}
+                        position={{lat: 37.7614169, lng: -122.4240931}} />
+
+
+                    <Polyline
+                        path={triangleCoords}
+                        strokeColor="#0000FF"
+                        strokeOpacity={0.8}
+                        strokeWeight={2} />
+                </Map>
+            </div>
+
+        );
+    }
 }
 
-export default App;
+export default GoogleApiWrapper({
+    apiKey: ("AIzaSyChbG4vc4a01alWP7RYrMvWd911uhGzOdo\n")
+})(MapContainer)
