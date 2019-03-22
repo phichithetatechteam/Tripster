@@ -16,7 +16,8 @@ export class MapContainer extends React.Component {
             origin_address: '',
             destination_address: '',
             origin_obj:{},
-            destination_obj:{}
+            destination_obj:{},
+
         };
     }
     handleChangeOrigin = origin_address => {
@@ -59,32 +60,20 @@ export class MapContainer extends React.Component {
         const destination_lon = this.state.destination_obj.lng;
 
         var options = { method: 'GET',
-            url: 'http://localhost:8888/get-route',
-            qs: { origin: `${origin_lat},${origin_lon}`, destination: `${destination_lat},${destination_lon}`},
+                url: 'http://localhost:8888/get-route',
+                qs: { origin: `${origin_lat},${origin_lon}`, destination: `${destination_lat},${destination_lon}`},
             headers:
                 { 'Postman-Token': '58b079c8-a465-471b-8d9e-43469319dcd8',
                     'cache-control': 'no-cache' } };
 
         request(options, function (error, response, body) {
             if (error) throw new Error(error);
-
-            console.log(body);
-        });
+            const parsedBody = JSON.parse(body)
+            this.setState({'steps': parsedBody.steps})
+        }.bind(this));
     }
 
     render() {
-        // const triangleCoords = [
-        //     {lat: 37.759703, lng: -122.428093},
-        //     {lat: 37.7614169, lng: -122.4240931},
-        //
-        // ];
-        const triangleCoords = [
-            {lat: 37.759703, lng: -122.428093},
-            {lat: 37.7612896, lng: -122.4283997},
-            {lat: 37.7615595, lng: -122.4241079},
-            {lat: 37.7614169, lng: -122.4240931},
-
-        ];
 
         return (
             <div>
@@ -182,7 +171,7 @@ export class MapContainer extends React.Component {
 
 
                     <Polyline
-                        path={triangleCoords}
+                        path={this.state.steps}
                         strokeColor="#0000FF"
                         strokeOpacity={4}
                         strokeWeight={10} />
