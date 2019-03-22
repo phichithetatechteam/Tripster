@@ -5,7 +5,7 @@ import {
     geocodeByAddress,
     getLatLng,
 } from 'react-places-autocomplete';
-import './App.css'
+import '../stylesheets/App.css'
 
 export class MapContainer extends React.Component {
     constructor(props) {
@@ -68,6 +68,10 @@ export class MapContainer extends React.Component {
     }
 
     render() {
+        const style = {
+            width: '100%',
+            height: '70%'
+        };
         return (
             <div>
                 <PlacesAutocomplete
@@ -149,7 +153,7 @@ export class MapContainer extends React.Component {
                     )}
                 </PlacesAutocomplete>
                 <button className="button" onClick={() => this.calculate_distance()}>Calculate</button>
-                <Map google={this.props.google} zoom={5} bounds={this.state.bounds} center={{lat: this.state.origin_obj.lat, lng: this.state.origin_obj.lng}}>
+                <Map style={style} google={this.props.google} zoom={5} bounds={this.state.bounds} center={{lat: this.state.origin_obj.lat, lng: this.state.origin_obj.lng}}>
                     <Marker
                         position={{lat: this.state.origin_obj.lat, lng: this.state.origin_obj.lng}} />
                     <Marker
@@ -159,7 +163,8 @@ export class MapContainer extends React.Component {
                         geodesic={false}
                         strokeColor="#0000FF"
                         strokeOpacity={4}
-                        strokeWeight={10} />
+                        strokeWeight={10}
+                    />
                 </Map>
             </div>
 
