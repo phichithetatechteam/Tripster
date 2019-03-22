@@ -6,24 +6,58 @@ import {
     geocodeByPlaceId,
     getLatLng,
 } from 'react-places-autocomplete';
+import './App.css'
 
 export class MapContainer extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { address: '' };
+        this.state = {
+            origin_address: '',
+            destination_address: '',
+            origin_obj:{},
+            destination_obj:{}
+        };
     }
-    handleChange = address => {
-        this.setState({ address });
+    handleChangeOrigin = origin_address => {
+        this.setState({
+            origin_address
+        });
     };
 
-    handleSelect = address => {
+    handleSelectOrigin = origin_address => {
 
-        geocodeByAddress(address)
+        geocodeByAddress(origin_address)
             .then(results => getLatLng(results[0]))
-            .then(latLng => console.log('Success', latLng))
+            .then(latLng => this.setState({origin_obj : latLng}))
             .catch(error => console.error('Error', error));
-        this.setState({address})
+        this.setState({origin_address})
     };
+
+    handleChangeDestination = destination_address => {
+        this.setState({
+            destination_address
+        });
+    };
+
+    handleSelectDestination = destination_address => {
+
+        geocodeByAddress(destination_address)
+            .then(results => getLatLng(results[0]))
+            .then(latLng => this.setState({destination_obj: latLng}))
+            .catch(error => console.error('Error', error));
+        this.setState({destination_address})
+    };
+
+    calculate_distance() {
+        console.log(this.state.origin_obj);
+        console.log(this.state.destination_obj);
+
+        const origin_lat = this.state.origin_obj.lat;
+        const origin_lon = this.state.origin_obj.lng;
+        const destination_lat = this.state.destination_obj.lat;
+        const destination_lon = this.state.destination_obj.lng;
+    }
+
     render() {
         // const triangleCoords = [
         //     {lat: 37.759703, lng: -122.428093},
@@ -42,9 +76,9 @@ export class MapContainer extends React.Component {
             <div>
 
                 <PlacesAutocomplete
-                    value={this.state.address}
-                    onChange={this.handleChange}
-                    onSelect={this.handleSelect}
+                    value={this.state.origin_address}
+                    onChange={this.handleChangeOrigin}
+                    onSelect={this.handleSelectOrigin}
                 >
                     {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                         <div>
@@ -80,7 +114,51 @@ export class MapContainer extends React.Component {
                         </div>
                     )}
                 </PlacesAutocomplete>
-                <button>Calculate</button>
+
+                <PlacesAutocomplete
+                    value={this.state.destination_address}
+                    onChange={this.handleChangeDestination}
+                    onSelect={this.handleSelectDestination}
+                >
+                    {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                        <div>
+                            <input
+                                {...getInputProps({
+                                    placeholder: 'Destination',
+                                    className: 'location-search-input',
+                                })}
+
+                            />
+                            <div className="autocomplete-dropdown-container">
+                                {loading && <div>Loading...</div>}
+                                {suggestions.map(suggestion => {
+                                    const className = suggestion.active
+                                        ? 'suggestion-item--active'
+                                        : 'suggestion-item';
+                                    // inline style for demonstration purpose
+                                    const style = suggestion.active
+                                        ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                        : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                                    return (
+                                        <div
+                                            {...getSuggestionItemProps(suggestion, {
+                                                className,
+                                                style,
+                                            })}
+                                        >
+                                            <span>{suggestion.description}</span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+                </PlacesAutocomplete>
+
+
+
+                <button className="button" onClick={() => this.calculate_distance()}>Calculate</button>
+
                 <Map google={this.props.google} zoom={14}>
                     <Marker
                         name={'Dolores park'}
