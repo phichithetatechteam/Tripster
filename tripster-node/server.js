@@ -15,6 +15,7 @@ module.exports = server
 
 // Retrieves username, first name, last name, age if the user exists in the data source.
 app.get('/get-route', function (req, res) {
-
-  res.send("SERVER IS RUNNING")
+  let origin = req.query.origin;
+  let destination = req.query.destination;
+  res.send({origin, destination});
 })
