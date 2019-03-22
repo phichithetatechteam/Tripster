@@ -22,7 +22,6 @@ module.exports = server
 app.get('/get-route', function (req, res) {
   let origin = req.query.origin;
   let destination = req.query.destination;
-
     var options = { method: 'GET',
         url: 'https://maps.googleapis.com/maps/api/directions/json',
         qs:
