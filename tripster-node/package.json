@@ -4,6 +4,7 @@
   "description": "wrote endpoints get and post",
   "main": "server.js",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.16.3",
     "mongo-mock": "^3.3.2",
     "mongodb": "^3.1.4",

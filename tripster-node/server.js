@@ -2,12 +2,15 @@
 const express = require('express')
 const fs = require('fs')
 const mongoClient = require('mongodb').MongoClient
+var cors = require('cors')
+
 
 const dbFunctions = require('./functions/db_functions')
 const databaseConnection = JSON.parse(fs.readFileSync('./mongo_settings.json', 'utf8'))
 
 // constants
 const app = express()
+app.use(cors())
 
 // start express server
 const server = app.listen(8888, () => console.log('Listening on Port 8888'))

@@ -1,4 +1,5 @@
 import {Map, InfoWindow, Marker, GoogleApiWrapper, Polygon, Polyline} from 'google-maps-react';
+import request from 'request'
 import React from 'react'
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {
@@ -56,6 +57,19 @@ export class MapContainer extends React.Component {
         const origin_lon = this.state.origin_obj.lng;
         const destination_lat = this.state.destination_obj.lat;
         const destination_lon = this.state.destination_obj.lng;
+
+        var options = { method: 'GET',
+            url: 'http://localhost:8888/get-route',
+            qs: { origin: 'chirag', destination: 'aswani' },
+            headers:
+                { 'Postman-Token': '58b079c8-a465-471b-8d9e-43469319dcd8',
+                    'cache-control': 'no-cache' } };
+
+        request(options, function (error, response, body) {
+            if (error) throw new Error(error);
+
+            console.log(body);
+        });
     }
 
     render() {
