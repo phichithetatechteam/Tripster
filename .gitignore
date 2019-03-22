@@ -1,0 +1,4 @@
+.DS_Store
+/tripster-react/.idea/
+/tripster-react/node_modules
+/tripster-node/node_modules
