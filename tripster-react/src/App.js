@@ -1,10 +1,8 @@
-import {Map, InfoWindow, Marker, GoogleApiWrapper, Polygon, Polyline} from 'google-maps-react';
-import request from 'request'
+import {Map, Marker, GoogleApiWrapper, Polyline} from 'google-maps-react';
 import React from 'react'
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {
     geocodeByAddress,
-    geocodeByPlaceId,
     getLatLng,
 } from 'react-places-autocomplete';
 import './App.css'
@@ -16,7 +14,8 @@ export class MapContainer extends React.Component {
             origin_address: '',
             destination_address: '',
             origin_obj:{},
-            destination_obj:{}
+            destination_obj:{},
+
         };
     }
     handleChangeOrigin = origin_address => {
@@ -26,7 +25,6 @@ export class MapContainer extends React.Component {
     };
 
     handleSelectOrigin = origin_address => {
-
         geocodeByAddress(origin_address)
             .then(results => getLatLng(results[0]))
             .then(latLng => this.setState({origin_obj : latLng}))
@@ -41,7 +39,6 @@ export class MapContainer extends React.Component {
     };
 
     handleSelectDestination = destination_address => {
-
         geocodeByAddress(destination_address)
             .then(results => getLatLng(results[0]))
             .then(latLng => this.setState({destination_obj: latLng}))
@@ -50,45 +47,29 @@ export class MapContainer extends React.Component {
     };
 
     calculate_distance() {
-        console.log(this.state.origin_obj);
-        console.log(this.state.destination_obj);
-
-        const origin_lat = this.state.origin_obj.lat;
-        const origin_lon = this.state.origin_obj.lng;
-        const destination_lat = this.state.destination_obj.lat;
-        const destination_lon = this.state.destination_obj.lng;
-
-        var options = { method: 'GET',
-            url: 'http://localhost:8888/get-route',
-            qs: { origin: `${origin_lat},${origin_lon}`, destination: `${destination_lat},${destination_lon}`},
-            headers:
-                { 'Postman-Token': '58b079c8-a465-471b-8d9e-43469319dcd8',
-                    'cache-control': 'no-cache' } };
-
-        request(options, function (error, response, body) {
-            if (error) throw new Error(error);
-
-            console.log(body);
+        const DirectionsService = new this.props.google.maps.DirectionsService();
+        DirectionsService.route({
+            origin: this.state.origin_address,
+            destination: this.state.destination_address,
+            travelMode: this.props.google.maps.TravelMode.DRIVING,
+        }, (result, status) => {
+            var bounds = new this.props.google.maps.LatLngBounds();
+            try{
+                const all_steps = (result.routes[0].overview_path)
+                for (let step in all_steps){
+                    let current_step_json = all_steps[step].toJSON()
+                    bounds.extend(current_step_json);
+                }
+                this.setState({'steps': result.routes[0].overview_path, bounds})
+            } catch (e){
+                console.log("ERR")
+            }
         });
     }
 
     render() {
-        // const triangleCoords = [
-        //     {lat: 37.759703, lng: -122.428093},
-        //     {lat: 37.7614169, lng: -122.4240931},
-        //
-        // ];
-        const triangleCoords = [
-            {lat: 37.759703, lng: -122.428093},
-            {lat: 37.7612896, lng: -122.4283997},
-            {lat: 37.7615595, lng: -122.4241079},
-            {lat: 37.7614169, lng: -122.4240931},
-
-        ];
-
         return (
             <div>
-
                 <PlacesAutocomplete
                     value={this.state.origin_address}
                     onChange={this.handleChangeOrigin}
@@ -167,22 +148,15 @@ export class MapContainer extends React.Component {
                         </div>
                     )}
                 </PlacesAutocomplete>
-
-
-
                 <button className="button" onClick={() => this.calculate_distance()}>Calculate</button>
-
-                <Map google={this.props.google} zoom={14}>
+                <Map google={this.props.google} zoom={5} bounds={this.state.bounds} center={{lat: this.state.origin_obj.lat, lng: this.state.origin_obj.lng}}>
                     <Marker
-                        name={'Dolores park'}
-                        position={{lat: 37.759703, lng: -122.428093}} />
+                        position={{lat: this.state.origin_obj.lat, lng: this.state.origin_obj.lng}} />
                     <Marker
-                        name={'Tartine Bakery'}
-                        position={{lat: 37.7614169, lng: -122.4240931}} />
-
-
+                        position={{lat: this.state.destination_obj.lat, lng: this.state.destination_obj.lng}} />
                     <Polyline
-                        path={triangleCoords}
+                        path={this.state.steps}
+                        geodesic={false}
                         strokeColor="#0000FF"
                         strokeOpacity={4}
                         strokeWeight={10} />
@@ -194,5 +168,5 @@ export class MapContainer extends React.Component {
 }
 
 export default GoogleApiWrapper({
-    apiKey: ("AIzaSyChbG4vc4a01alWP7RYrMvWd911uhGzOdo\n")
+    apiKey: ("AIzaSyChbG4vc4a01alWP7RYrMvWd911uhGzOdo")
 })(MapContainer)
