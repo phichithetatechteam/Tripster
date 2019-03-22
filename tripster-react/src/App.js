@@ -60,7 +60,7 @@ export class MapContainer extends React.Component {
 
         var options = { method: 'GET',
             url: 'http://localhost:8888/get-route',
-            qs: { origin: 'chirag', destination: 'aswani' },
+            qs: { origin: `${origin_lat},${origin_lon}`, destination: `${destination_lat},${destination_lon}`},
             headers:
                 { 'Postman-Token': '58b079c8-a465-471b-8d9e-43469319dcd8',
                     'cache-control': 'no-cache' } };
