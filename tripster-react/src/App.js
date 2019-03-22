@@ -87,7 +87,6 @@ export class MapContainer extends React.Component {
                                     placeholder: 'Origin',
                                     className: 'location-search-input',
                                 })}
-                                style={{'width': '100%'}}
                             />
                             <div className="autocomplete-dropdown-container">
                                 {loading && <div>Loading...</div>}
