@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1c3b4709-ca18-4671-9ca7-c1f92222ac7c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -53,14 +52,14 @@
       <usages-collector id="statistics.lifecycle.project">
         <counts>
           <entry key="project.closed" value="2" />
-          <entry key="project.open.time.1" value="1" />
+          <entry key="project.open.time.1" value="2" />
           <entry key="project.open.time.6" value="1" />
-          <entry key="project.opened" value="2" />
+          <entry key="project.opened" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts">
         <counts>
-          <entry key="ESLintLanguageService" value="1" />
+          <entry key="ESLintLanguageService" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -73,6 +72,16 @@
           <entry key="JSON" value="1" />
         </counts>
       </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="js" value="224" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="JavaScript" value="224" />
+        </counts>
+      </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
@@ -80,8 +89,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/App.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="23">
-              <caret line="5" column="38" selection-start-line="5" selection-start-column="38" selection-end-line="5" selection-end-column="38" />
+            <state relative-caret-position="442">
+              <caret line="33" column="45" selection-start-line="33" selection-start-column="45" selection-end-line="33" selection-end-column="45" />
+              <folding>
+                <element signature="e#0#95#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -137,9 +149,10 @@
     </packageJsonPaths>
   </component>
   <component name="ProjectFrameBounds">
+    <option name="x" value="960" />
     <option name="y" value="23" />
-    <option name="width" value="1280" />
-    <option name="height" value="702" />
+    <option name="width" value="960" />
+    <option name="height" value="982" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
@@ -155,6 +168,11 @@
             <path>
               <item name="tripster-react" type="b2602c69:ProjectViewProjectNode" />
               <item name="tripster-react" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tripster-react" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tripster-react" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -202,16 +220,18 @@
       <workItem from="1553119098539" duration="2670000" />
       <workItem from="1553211286948" duration="165000" />
       <workItem from="1553211485799" duration="1000" />
+      <workItem from="1553211496816" duration="2412000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2836000" />
+    <option name="totallyTimeSpent" value="5248000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="702" extended-state="0" />
+    <frame x="960" y="23" width="960" height="982" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.375695" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.5037274" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -225,7 +245,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50039715" side_tool="true" weight="0.32913387" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.49960285" visible="true" weight="0.47868854" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49960285" visible="true" weight="0.26067415" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -272,15 +292,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/App.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23">
-          <caret line="5" column="38" selection-start-line="5" selection-start-column="38" selection-end-line="5" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/App.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="33" column="45" selection-start-line="33" selection-start-column="45" selection-end-line="33" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#95#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
     </entry>
   </component>
 </project>

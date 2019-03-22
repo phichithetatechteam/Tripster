@@ -3,7 +3,6 @@ import React from 'react'
 
 export class MapContainer extends React.Component {
     render() {
-        console.log(this.props.google)
         // const triangleCoords = [
         //     {lat: 37.759703, lng: -122.428093},
         //     {lat: 37.7614169, lng: -122.4240931},
@@ -19,8 +18,9 @@ export class MapContainer extends React.Component {
 
         return (
             <div>
-                <button>HI</button>
-                <p>We are traveling from Delores Park to Tartine Bakery</p>
+                <input placeholder={"Origin"} onChange={origin_input => console.log(origin_input.target.value)}></input>
+                <input placeholder={"Destination"} onChange={destination_input => console.log(destination_input.target.value)}></input>
+                <button>Calculate</button>
                 <Map google={this.props.google} zoom={14}>
                     <Marker
                         name={'Dolores park'}
@@ -33,8 +33,8 @@ export class MapContainer extends React.Component {
                     <Polyline
                         path={triangleCoords}
                         strokeColor="#0000FF"
-                        strokeOpacity={0.8}
-                        strokeWeight={2} />
+                        strokeOpacity={4}
+                        strokeWeight={10} />
                 </Map>
             </div>
 
