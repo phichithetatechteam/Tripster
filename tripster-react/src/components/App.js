@@ -1,11 +1,15 @@
 import {Map, Marker, GoogleApiWrapper, Polyline} from 'google-maps-react';
 import React from 'react'
 import PlacesAutocomplete from 'react-places-autocomplete';
+import 'antd/dist/antd.css';
+import { Input, Button, Radio, Icon, Card, Checkbox, Slider } from 'antd';
 import {
     geocodeByAddress,
     getLatLng,
 } from 'react-places-autocomplete';
 import '../stylesheets/App.css'
+
+const CheckboxGroup = Checkbox.Group;
 
 export class MapContainer extends React.Component {
     constructor(props) {
@@ -13,9 +17,9 @@ export class MapContainer extends React.Component {
         this.state = {
             origin_address: '',
             destination_address: '',
-            origin_obj:{},
-            destination_obj:{},
-
+            origin_obj: {},
+            destination_obj: {},
+            stops: []
         };
     }
     handleChangeOrigin = origin_address => {
@@ -47,6 +51,7 @@ export class MapContainer extends React.Component {
     };
 
     calculate_distance() {
+        console.log(this.state);
         const DirectionsService = new this.props.google.maps.DirectionsService();
         DirectionsService.route({
             origin: this.state.origin_address,
@@ -65,15 +70,38 @@ export class MapContainer extends React.Component {
                 console.log("ERR")
             }
         });
+
+        var request = require("request");
+
+        var options = { method: 'GET',
+            url: 'http://localhost:8888/calculate-distance',
+            qs: {
+                origin_lat: this.state.origin_obj.lat,
+                origin_lng: this.state.origin_obj.lng,
+                destination_lat: this.state.destination_obj.lat,
+                destination_lng: this.state.destination_obj.lng,
+                stops: this.state.stops
+            },
+            headers:
+                { 'Postman-Token': '172aa67b-54c6-4116-9000-9a22e9480045',
+                    'cache-control': 'no-cache' } };
+
+        request(options, function (error, response, body) {
+            if (error) throw new Error(error);
+
+            console.log(body);
+        }.bind(this));
+
+
     }
 
     render() {
-        const style = {
-            width: '100%',
-            height: '70%'
-        };
+        const plainOptions = ['Active Life', 'Arts & Entertainment', 'Nightlife', 'Restaurants', 'Hotels & Travel'];
         return (
-            <div>
+            <div class="flex-container">
+
+                <div class="flex-container-div-left">
+                    <h1>Tripster</h1>
                 <PlacesAutocomplete
                     value={this.state.origin_address}
                     onChange={this.handleChangeOrigin}
@@ -81,7 +109,7 @@ export class MapContainer extends React.Component {
                 >
                     {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                         <div>
-                            <input
+                            <Input
                                 {...getInputProps({
                                     placeholder: 'Origin',
                                     className: 'location-search-input',
@@ -119,8 +147,8 @@ export class MapContainer extends React.Component {
                     onSelect={this.handleSelectDestination}
                 >
                     {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-                        <div>
-                            <input
+                        <div className>
+                            <Input
                                 {...getInputProps({
                                     placeholder: 'Destination',
                                     className: 'location-search-input',
@@ -152,20 +180,33 @@ export class MapContainer extends React.Component {
                         </div>
                     )}
                 </PlacesAutocomplete>
-                <button className="button" onClick={() => this.calculate_distance()}>Calculate</button>
-                <Map style={style} google={this.props.google} zoom={5} bounds={this.state.bounds} center={{lat: this.state.origin_obj.lat, lng: this.state.origin_obj.lng}}>
-                    <Marker
-                        position={{lat: this.state.origin_obj.lat, lng: this.state.origin_obj.lng}} />
-                    <Marker
-                        position={{lat: this.state.destination_obj.lat, lng: this.state.destination_obj.lng}} />
-                    <Polyline
-                        path={this.state.steps}
-                        geodesic={false}
-                        strokeColor="#0000FF"
-                        strokeOpacity={4}
-                        strokeWeight={10}
-                    />
-                </Map>
+
+                    <Card
+                        title="Tripster Stops"
+                    >
+                        <CheckboxGroup options={plainOptions} onChange={stops => this.setState({stops})} />
+                    </Card>
+
+                    <Button type="primary" onClick={() => this.calculate_distance()}>Calculate</Button>
+                </div>
+
+                <div class="flex-container-div-right">
+
+                    <Map className="googlemaps" google={this.props.google} zoom={5} bounds={this.state.bounds} center={{lat: this.state.origin_obj.lat, lng: this.state.origin_obj.lng}}>
+                        <Marker
+                            position={{lat: this.state.origin_obj.lat, lng: this.state.origin_obj.lng}} />
+                        <Marker
+                            position={{lat: this.state.destination_obj.lat, lng: this.state.destination_obj.lng}} />
+                        <Polyline
+                            path={this.state.steps}
+                            geodesic={false}
+                            strokeColor="#0000FF"
+                            strokeOpacity={4}
+                            strokeWeight={10}
+                        />
+                    </Map>
+
+                </div>
             </div>
 
         );
