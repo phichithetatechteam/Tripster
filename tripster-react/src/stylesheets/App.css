@@ -6,17 +6,8 @@
   background-position: 10px 10px;
 }
 
-.button {
-  width: 20%;
-  background-color: skyblue;
-  margin: 20px auto;
-  color: black;
-  padding: 14px 28px;
-  text-align: center;
-  text-decoration: none;
-  display: block;
-  font-size: 16px;
-  transition-duration: 0.5s;
+.ant-btn-primary {
+  margin: 15px;
 }
 
 .button:hover {
@@ -34,6 +25,46 @@ html {
   text-align: center;
 }
 
-.btn {
-  margin-top: 1.5rem;
+.h1 {
+  margin: 0px;
+}
+
+.googlemaps {
+  height: 50% !important;
+  width: 70% !important;
+}
+
+.flex-container {
+  display: flex;
+  align-items: stretch;
+}
+
+.flex-container-div-left{
+  width: 100px;
+  margin: 10px;
+  text-align: center;
+  flex-grow: 2;
+}
+.flex-container-div-right{
+  width: 100px;
+  margin: 10px;
+  text-align: center;
+  line-height: 10px;
+  font-size: 10px;
+  flex-grow: 8;
+  flex-wrap: wrap;
+}
+
+.flex-container-div-right-up{
+   width: 100px;
+   margin: 10px;
+   text-align: center;
+   line-height: 10px;
+   font-size: 10px;
+   flex-grow: 8;
+   align-items: flex-start;
+ }
+
+.flex-container-div-right-down{
+  align-content: flex-end;
 }
