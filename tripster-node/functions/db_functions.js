@@ -13,7 +13,7 @@ function isMongoConnected (err) {
 }
 
 module.exports = {
-  post_new_profile_entity: function (mongoClient, dbURL, dbName, dbCollection, userName, firstName, lastName, age) {
+  post_new_profile_entity: function (mongoClient, dbURL, dbName, dbCollection, userName, pw) {
     return new Promise(function (resolve, reject) {
       mongoClient.connect(dbURL, { useNewUrlParser: true }, function (err, client) {
         if (isMongoConnected(err)) {
@@ -25,22 +25,22 @@ module.exports = {
           const uuid = uuidv1()
 
           // Validates Inputs
-          if (validation.isValidUserName(userName) && validation.isValidFirstOrLastName(firstName) && validation.isValidFirstOrLastName(lastName) && validation.isValidAge(age)) {
+          //if (validation.isValidUserName(userName) && validation.isValidFirstOrLastName(firstName) && validAge(age)) {
             collection.findOne({ userName }, function (collectionError, document) {
               if (collectionError) {
                 reject(collectionError)
               }
               // if username not in collection - insert
               if (document === null) {
-                collection.insertOne({ userName, firstName, lastName, age, uuid })
-                resolve({ 'status': 200, 'message': { userName, firstName, lastName, age, uuid } }) // ok
+                collection.insertOne({ userName, pw})
+                resolve({ 'status': 200, 'message': { userName, pw } }) // ok
               } else { // username already in collection - do not insert
                 resolve({ 'status': 409, 'message': 'Username already in collection' }) // conflict
               }
             })
-          } else { // Invalid Input
-            resolve({ 'status': 422, 'message': 'Invalid Parameters' }) // unprocessable entity
-          }
+          //} else { // Invalid Input
+            //resolve({ 'status': 422, 'message': 'Invalid Parameters' }) // unprocessable entity
+          //}
         }
       })
     })

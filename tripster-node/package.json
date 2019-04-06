@@ -7,7 +7,7 @@
     "cors": "^2.8.5",
     "express": "^4.16.3",
     "mongo-mock": "^3.3.2",
-    "mongodb": "^3.1.4",
+    "mongodb": "^3.2.3",
     "node": "^10.10.0",
     "nodemon": "^1.18.10",
     "request": "^2.88.0",
