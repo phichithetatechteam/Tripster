@@ -23,7 +23,8 @@ export class MapContainer extends React.Component {
             stops: [],
             addition_markers: undefined,
             sort_by: 'best_match',
-            price: 1
+            price: 1,
+            waypoints: []
         };
     }
     handleChangeOrigin = origin_address => {
@@ -55,11 +56,12 @@ export class MapContainer extends React.Component {
     };
 
     calculate_distance() {
-        console.log(this.state);
         const DirectionsService = new this.props.google.maps.DirectionsService();
         DirectionsService.route({
             origin: this.state.origin_address,
             destination: this.state.destination_address,
+            waypoints: this.state.waypoints,
+            optimizeWaypoints: true,
             travelMode: this.props.google.maps.TravelMode.DRIVING,
         }, (result, status) => {
             var bounds = new this.props.google.maps.LatLngBounds();
@@ -91,10 +93,6 @@ export class MapContainer extends React.Component {
             headers:
                 { 'Postman-Token': '172aa67b-54c6-4116-9000-9a22e9480045',
                     'cache-control': 'no-cache' } };
-
-        let yelp_coordinates_lat = [];
-        let yelp_coordinates_lng = [];
-
         request(options, function (error, response, body) {
             if (error) throw new Error(error);
 
@@ -105,19 +103,23 @@ export class MapContainer extends React.Component {
                 <Marker
                     key={stop.image_url}
                     position={{lat: stop.coordinates.latitude, lng: stop.coordinates.longitude}}
-                    onClick={() => console.log(stop.name)}
+                    onClick={() => this.setWayPoint(stop.coordinates.latitude, stop.coordinates.longitude)}
                 />
             );
-
             this.setState({additional_markers})
 
         }.bind(this));
+    }
 
-
+    setWayPoint(lat, lng){
+        this.setState({waypoints:[...this.state.waypoints, {
+                location: new this.props.google.maps.LatLng(lat,lng),
+                stopover: true
+            }]});
+        this.calculate_distance()
     }
 
     render() {
-        console.log(this.state)
         const tripster_stops = [
             { label: 'Active Life', value: 'Active Life' },
             { label: 'Arts & Entertainment', value: 'Arts & Entertainment' },
