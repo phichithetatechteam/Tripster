@@ -2,6 +2,7 @@ import {Map, Marker, GoogleApiWrapper, Polyline} from 'google-maps-react';
 import React from 'react'
 import PlacesAutocomplete from 'react-places-autocomplete';
 import 'antd/dist/antd.css';
+import querystring from 'querystring';
 import { Input, Button, Radio, Icon, Card, Checkbox, Slider } from 'antd';
 import {
     geocodeByAddress,
@@ -114,6 +115,31 @@ export class MapContainer extends React.Component {
         }.bind(this));
     }
 
+    login() {
+        const stateKey = 'spotify_auth_state';
+        const generateRandomString = function (length) {
+            let text = '';
+            const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+            for (let i = 0; i < length; i += 1) {
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+            }
+            return text;
+        };
+
+        const state = generateRandomString(16);
+        //cookies.set(stateKey, state);
+        const scope = 'user-read-private user-read-email playlist-read-private playlist-modify-private playlist-modify-public playlist-read-collaborative';
+        window.open(`https://accounts.spotify.com/authorize?${
+            querystring.stringify({
+                response_type: 'code',
+                client_id: '682367fe3a8a41a0b81f34dc5c6fe936',
+                scope,
+                redirect_uri: 'http://localhost:3000/' ,
+                state})
+            })}`, '_self');
+    }
+
     render() {
         const plainOptions = ['Active Life', 'Arts & Entertainment', 'Nightlife', 'Restaurants', 'Hotels & Travel'];
         return (
@@ -207,7 +233,7 @@ export class MapContainer extends React.Component {
                     </Card>
 
                     <Button type="primary" onClick={() => this.calculate_distance()}>Calculate</Button>
-                    <Button type="primary" onClick={() => this.connect_spotify()}>Spotifunk</Button>
+                    <Button type="primary" onClick={() => this.login()}>Spotifunk</Button>
                 </div>
 
                 <div class="flex-container-div-right">
