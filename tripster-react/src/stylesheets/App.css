@@ -68,3 +68,14 @@ html {
 .flex-container-div-right-down{
   align-content: flex-end;
 }
+
+.calculate-button{
+    width: 100%;
+}
+.sort-by{
+    color: #000;
+    cursor: default;
+}
+.sort-by:hover{
+    color: #000;
+}
