@@ -92,7 +92,26 @@ export class MapContainer extends React.Component {
             console.log(body);
         }.bind(this));
 
+    }
 
+    connect_spotify() {
+        var request = require("request");
+
+        var options = { method: 'GET',
+            url: 'http://localhost:8888/spotifunk',
+            qs:
+                { client_id: 'c3c198763ae0451fa0aeeab520a607a8',
+                    response_type: 'code',
+                    redirect_uri: 'https://localhost:3000/' },
+            headers:
+                { 'Postman-Token': 'ddc8061d-ac87-4778-aadc-be3796fca285',
+                    'cache-control': 'no-cache' } };
+
+        request(options, function (error, response, body) {
+            if (error) throw new Error(error);
+
+            console.log(body);
+        }.bind(this));
     }
 
     render() {
@@ -188,6 +207,7 @@ export class MapContainer extends React.Component {
                     </Card>
 
                     <Button type="primary" onClick={() => this.calculate_distance()}>Calculate</Button>
+                    <Button type="primary" onClick={() => this.connect_spotify()}>Spotifunk</Button>
                 </div>
 
                 <div class="flex-container-div-right">
