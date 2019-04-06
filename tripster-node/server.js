@@ -52,11 +52,29 @@ app.get('/calculate-distance', function (req, res) {
     request(options, function (error, response, body) {
         if (error) throw new Error(error);
 
-        console.log(body);
+        let obj = JSON.parse(body)
+        obj = obj['businesses']
+
+        let results = {'stops': []}
+
+        var i;
+        for (i = 0; i < obj.length; i+=1){
+            let currObj = obj[i];
+
+            //console.log(currObj);
+            //console.log(currObj['name'], currObj['image_url'], currObj['coordinates'], currObj['rating'], currObj['url'], currObj['review_count'], currObj['price'], currObj['phone']);
+            let dict = {'name':currObj['name'], 'image_url':currObj['image_url'], 'coordinates':currObj['coordinates'], 'rating':currObj['rating'], 'url':currObj['url'], 'review_count':currObj['review_count'], 'phone':currObj['phone']}
+            //console.log(dict)
+            results['stops'].push(dict)
+        }
+        console.log(results);
+        res.send(results);
+
+        //console.log(obj);
     });
 
 
-    res.send("BACKEND GOT:" + "");
+
 
 })
 
