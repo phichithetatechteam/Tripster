@@ -115,6 +115,8 @@ export class MapContainer extends React.Component {
         }.bind(this));
     }
 
+    //redirects you to the login page for Spotify
+    //only works if you are currently not logged into Spotify.
     login() {
         const stateKey = 'spotify_auth_state';
         const generateRandomString = function (length) {
