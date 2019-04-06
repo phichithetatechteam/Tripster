@@ -19,7 +19,8 @@ export class MapContainer extends React.Component {
             destination_address: '',
             origin_obj: {},
             destination_obj: {},
-            stops: []
+            stops: [],
+            addition_markers: undefined
         };
     }
     handleChangeOrigin = origin_address => {
@@ -86,10 +87,25 @@ export class MapContainer extends React.Component {
                 { 'Postman-Token': '172aa67b-54c6-4116-9000-9a22e9480045',
                     'cache-control': 'no-cache' } };
 
+        let yelp_coordinates_lat = [];
+        let yelp_coordinates_lng = [];
+
         request(options, function (error, response, body) {
             if (error) throw new Error(error);
 
-            console.log(body);
+            var json = body;
+            var json_stops = JSON.parse(json).stops;
+
+            const additional_markers = json_stops.map((stop) =>
+                <Marker
+                    key={stop.image_url}
+                    position={{lat: stop.coordinates.latitude, lng: stop.coordinates.longitude}}
+                    onClick={() => console.log(stop.name)}
+                />
+            );
+
+            this.setState({additional_markers})
+
         }.bind(this));
 
 
@@ -197,6 +213,7 @@ export class MapContainer extends React.Component {
                             position={{lat: this.state.origin_obj.lat, lng: this.state.origin_obj.lng}} />
                         <Marker
                             position={{lat: this.state.destination_obj.lat, lng: this.state.destination_obj.lng}} />
+                        {this.state.additional_markers}
                         <Polyline
                             path={this.state.steps}
                             geodesic={false}
