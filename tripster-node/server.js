@@ -18,6 +18,10 @@ app.use(cors())
 const server = app.listen(8888, () => console.log('Listening on Port 8888'))
 module.exports = server
 
+app.get('/status', function (req, res) {
+	res.send("app is running")
+})
+
 // Retrieves username, first name, last name, age if the user exists in the data source.
 app.get('/calculate-distance', function (req, res) {
     const origin_lat = req.query.origin_lat;
