@@ -272,8 +272,6 @@ export class MapContainer extends React.Component {
                         </Button>
 
                     </Card>
-
-                    <Button type="primary" onClick={() => this.calculate_distance()}>Calculate</Button>
                     <Button type="primary" onClick={() => this.login()}>Spotifunk</Button>
 
                 </div>
