@@ -3,12 +3,13 @@ import React from 'react'
 import PlacesAutocomplete from 'react-places-autocomplete';
 import 'antd/dist/antd.css';
 import querystring from 'querystring';
-import { Input, Button, Radio, Icon, Card, Checkbox, Slider } from 'antd';
+import { Input, Button, Radio, Card, Checkbox, Select } from 'antd';
 import {
     geocodeByAddress,
     getLatLng,
 } from 'react-places-autocomplete';
 import '../stylesheets/App.css'
+import request from 'request'
 
 const CheckboxGroup = Checkbox.Group;
 const Option = Select.Option;
@@ -78,7 +79,6 @@ export class MapContainer extends React.Component {
             }
         });
 
-        var request = require("request");
 
         var options = { method: 'GET',
             url: 'http://localhost:8888/calculate-distance',
@@ -99,32 +99,22 @@ export class MapContainer extends React.Component {
 
             var json = body;
             var json_stops = JSON.parse(json).stops;
-    }
 
-    connect_spotify() {
-        var request = require("request");
+            const additional_markers = json_stops.map((stop) =>
+                <Marker
+                    key={stop.image_url}
+                    position={{lat: stop.coordinates.latitude, lng: stop.coordinates.longitude}}
+                    onClick={() => this.setWayPoint(stop.coordinates.latitude, stop.coordinates.longitude)}
+                />
+            );
+            this.setState({additional_markers})
 
-        var options = { method: 'GET',
-            url: 'http://localhost:8888/spotifunk',
-            qs:
-                { client_id: 'c3c198763ae0451fa0aeeab520a607a8',
-                    response_type: 'code',
-                    redirect_uri: 'https://localhost:3000/' },
-            headers:
-                { 'Postman-Token': 'ddc8061d-ac87-4778-aadc-be3796fca285',
-                    'cache-control': 'no-cache' } };
-
-        request(options, function (error, response, body) {
-            if (error) throw new Error(error);
-
-            console.log(body);
         }.bind(this));
     }
 
     //redirects you to the login page for Spotify
     //only works if you are currently not logged into Spotify.
     login() {
-        const stateKey = 'spotify_auth_state';
         const generateRandomString = function (length) {
             let text = '';
             const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -136,7 +126,6 @@ export class MapContainer extends React.Component {
         };
 
         const state = generateRandomString(16);
-        //cookies.set(stateKey, state);
         const scope = 'user-read-private user-read-email playlist-read-private playlist-modify-private playlist-modify-public playlist-read-collaborative';
         window.open(`https://accounts.spotify.com/authorize?${
             querystring.stringify({
@@ -146,16 +135,8 @@ export class MapContainer extends React.Component {
                 redirect_uri: 'http://localhost:3000/' ,
                 state})
             })}`, '_self');
-            const additional_markers = json_stops.map((stop) =>
-                <Marker
-                    key={stop.image_url}
-                    position={{lat: stop.coordinates.latitude, lng: stop.coordinates.longitude}}
-                    onClick={() => this.setWayPoint(stop.coordinates.latitude, stop.coordinates.longitude)}
-                />
-            );
-            this.setState({additional_markers})
 
-        }.bind(this));
+
     }
 
     setWayPoint(lat, lng){
