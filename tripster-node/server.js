@@ -24,14 +24,13 @@ app.get('/calculate-distance', function (req, res) {
     const origin_lng = req.query.origin_lng;
     const destination_lat = req.query.destination_lat;
     const destination_lng = req.query.destination_lng;
-    const stops = req.query.stops;
+    const sort_by = req.query.sort_by;
+    const price = req.query.price;
+    const categories = req.query.stops;
 
     const middlepoint = middlePoint(parseFloat(origin_lat), parseFloat(origin_lng), parseFloat(destination_lat), parseFloat(destination_lng))
     const middlepoint_lat = middlepoint[1];
     const middlepoint_lng = middlepoint[0];
-
-    console.log(middlepoint_lat);
-    console.log(middlepoint_lng);
 
 
     var options = { method: 'GET',
@@ -40,9 +39,11 @@ app.get('/calculate-distance', function (req, res) {
             latitude: middlepoint_lat.toString(),
             longitude: middlepoint_lng.toString(),
             radius: '30000',
-            categories: 'restaurants',
+            categories: categories,
             limit: '5',
-            open_now: 'true'
+            open_now: 'true',
+            sort_by: sort_by,
+            price: price
         },
         headers: {
             Authorization: 'Bearer gT_aQFG6tpHRNWakUP1lGp7QjJk-hL8CUz0XirR6-L3TkJdXJUj8dmmQ-ye4y7y4OW_v_D6DWXW200yOQVkAlvqkrgokTQ59j9ptwfh6vqJwVBuI1KiE7ANIhpGeXHYx'
@@ -61,16 +62,12 @@ app.get('/calculate-distance', function (req, res) {
         for (i = 0; i < obj.length; i+=1){
             let currObj = obj[i];
 
-            //console.log(currObj);
-            //console.log(currObj['name'], currObj['image_url'], currObj['coordinates'], currObj['rating'], currObj['url'], currObj['review_count'], currObj['price'], currObj['phone']);
             let dict = {'name':currObj['name'], 'image_url':currObj['image_url'], 'coordinates':currObj['coordinates'], 'rating':currObj['rating'], 'url':currObj['url'], 'review_count':currObj['review_count'], 'phone':currObj['phone']}
-            //console.log(dict)
             results['stops'].push(dict)
         }
-        //console.log(results);
+      //console.log(results);
         res.send(results);
 
-        //console.log(obj);
     });
 
 })

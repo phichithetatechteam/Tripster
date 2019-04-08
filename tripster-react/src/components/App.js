@@ -11,6 +11,7 @@ import {
 import '../stylesheets/App.css'
 
 const CheckboxGroup = Checkbox.Group;
+const Option = Select.Option;
 
 export class MapContainer extends React.Component {
     constructor(props) {
@@ -20,7 +21,11 @@ export class MapContainer extends React.Component {
             destination_address: '',
             origin_obj: {},
             destination_obj: {},
-            stops: []
+            stops: [],
+            addition_markers: undefined,
+            sort_by: 'best_match',
+            price: 1,
+            waypoints: []
         };
     }
     handleChangeOrigin = origin_address => {
@@ -52,11 +57,12 @@ export class MapContainer extends React.Component {
     };
 
     calculate_distance() {
-        console.log(this.state);
         const DirectionsService = new this.props.google.maps.DirectionsService();
         DirectionsService.route({
             origin: this.state.origin_address,
             destination: this.state.destination_address,
+            waypoints: this.state.waypoints,
+            optimizeWaypoints: true,
             travelMode: this.props.google.maps.TravelMode.DRIVING,
         }, (result, status) => {
             var bounds = new this.props.google.maps.LatLngBounds();
@@ -81,18 +87,18 @@ export class MapContainer extends React.Component {
                 origin_lng: this.state.origin_obj.lng,
                 destination_lat: this.state.destination_obj.lat,
                 destination_lng: this.state.destination_obj.lng,
+                sort_by: this.state.sort_by,
+                price: this.state.price,
                 stops: this.state.stops
             },
             headers:
                 { 'Postman-Token': '172aa67b-54c6-4116-9000-9a22e9480045',
                     'cache-control': 'no-cache' } };
-
         request(options, function (error, response, body) {
             if (error) throw new Error(error);
 
-            console.log(body);
-        }.bind(this));
-
+            var json = body;
+            var json_stops = JSON.parse(json).stops;
     }
 
     connect_spotify() {
@@ -140,10 +146,34 @@ export class MapContainer extends React.Component {
                 redirect_uri: 'http://localhost:3000/' ,
                 state})
             })}`, '_self');
+            const additional_markers = json_stops.map((stop) =>
+                <Marker
+                    key={stop.image_url}
+                    position={{lat: stop.coordinates.latitude, lng: stop.coordinates.longitude}}
+                    onClick={() => this.setWayPoint(stop.coordinates.latitude, stop.coordinates.longitude)}
+                />
+            );
+            this.setState({additional_markers})
+
+        }.bind(this));
+    }
+
+    setWayPoint(lat, lng){
+        this.setState({waypoints:[...this.state.waypoints, {
+                location: new this.props.google.maps.LatLng(lat,lng),
+                stopover: true
+            }]});
+        this.calculate_distance()
     }
 
     render() {
-        const plainOptions = ['Active Life', 'Arts & Entertainment', 'Nightlife', 'Restaurants', 'Hotels & Travel'];
+        const tripster_stops = [
+            { label: 'Active Life', value: 'Active Life' },
+            { label: 'Arts & Entertainment', value: 'Arts & Entertainment' },
+            { label: 'Nightlife', value: 'Nightlife' },
+            { label: 'Restaurants', value: 'Restaurants' },
+            { label: 'Hotels & Travel', value: 'Hotels & Travel' },
+        ];
         return (
             <div class="flex-container">
 
@@ -194,13 +224,12 @@ export class MapContainer extends React.Component {
                     onSelect={this.handleSelectDestination}
                 >
                     {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-                        <div className>
+                        <div>
                             <Input
                                 {...getInputProps({
                                     placeholder: 'Destination',
                                     className: 'location-search-input',
                                 })}
-
                             />
                             <div className="autocomplete-dropdown-container">
                                 {loading && <div>Loading...</div>}
@@ -227,15 +256,45 @@ export class MapContainer extends React.Component {
                         </div>
                     )}
                 </PlacesAutocomplete>
-
+                    <br/>
                     <Card
                         title="Tripster Stops"
                     >
-                        <CheckboxGroup options={plainOptions} onChange={stops => this.setState({stops})} />
+                        <CheckboxGroup
+                            options={tripster_stops}
+                            onChange={stops => this.setState({stops})}
+                        />
+                        <a className={"sort-by"}>Sort By: </a>
+
+                        <Select defaultValue={"best_match"} style={{width: 150}} max={51} onChange={(sort_by) => this.setState({sort_by})}>
+                            <Option value="best_match">Best Match</Option>
+                            <Option value="rating">Rating</Option>
+                            <Option value="review_count">Review Count</Option>
+                            <Option value="distance">Distance</Option>
+                        </Select>
+
+                        <br/>
+
+                        <Radio.Group defaultValue="1" buttonStyle="solid" onChange={price => this.setState({price: price.target.value})}>
+                            <Radio.Button value="1">$</Radio.Button>
+                            <Radio.Button value="2">$$</Radio.Button>
+                            <Radio.Button value="3">$$$</Radio.Button>
+                            <Radio.Button value="4">$$$</Radio.Button>
+                        </Radio.Group>
+
+                        <Button
+                            type="primary"
+                            onClick={() => this.calculate_distance()}
+                            className={"calculate-button"}
+                        >
+                            Calculate
+                        </Button>
+
                     </Card>
 
                     <Button type="primary" onClick={() => this.calculate_distance()}>Calculate</Button>
                     <Button type="primary" onClick={() => this.login()}>Spotifunk</Button>
+
                 </div>
 
                 <div class="flex-container-div-right">
@@ -245,6 +304,7 @@ export class MapContainer extends React.Component {
                             position={{lat: this.state.origin_obj.lat, lng: this.state.origin_obj.lng}} />
                         <Marker
                             position={{lat: this.state.destination_obj.lat, lng: this.state.destination_obj.lng}} />
+                        {this.state.additional_markers}
                         <Polyline
                             path={this.state.steps}
                             geodesic={false}
