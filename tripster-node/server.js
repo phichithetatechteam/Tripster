@@ -19,6 +19,10 @@ app.use(cors())
 const server = app.listen(8888, () => console.log('Listening on Port 8888'))
 module.exports = server
 
+app.get('/status', function (req, res) {
+	res.send("app is running")
+})
+
 // Retrieves username, first name, last name, age if the user exists in the data source.
 //test for mongo server
 app.get('/testdb', function(req,res){
@@ -48,14 +52,13 @@ app.get('/calculate-distance', function (req, res) {
     const origin_lng = req.query.origin_lng;
     const destination_lat = req.query.destination_lat;
     const destination_lng = req.query.destination_lng;
-    const stops = req.query.stops;
+    const sort_by = req.query.sort_by;
+    const price = req.query.price;
+    const categories = req.query.stops;
 
     const middlepoint = middlePoint(parseFloat(origin_lat), parseFloat(origin_lng), parseFloat(destination_lat), parseFloat(destination_lng))
     const middlepoint_lat = middlepoint[1];
     const middlepoint_lng = middlepoint[0];
-
-    console.log(middlepoint_lat);
-    console.log(middlepoint_lng);
 
 
     var options = { method: 'GET',
@@ -64,9 +67,11 @@ app.get('/calculate-distance', function (req, res) {
             latitude: middlepoint_lat.toString(),
             longitude: middlepoint_lng.toString(),
             radius: '30000',
-            categories: 'restaurants',
+            categories: categories,
             limit: '5',
-            open_now: 'true'
+            open_now: 'true',
+            sort_by: sort_by,
+            price: price
         },
         headers: {
             Authorization: 'Bearer gT_aQFG6tpHRNWakUP1lGp7QjJk-hL8CUz0XirR6-L3TkJdXJUj8dmmQ-ye4y7y4OW_v_D6DWXW200yOQVkAlvqkrgokTQ59j9ptwfh6vqJwVBuI1KiE7ANIhpGeXHYx'
@@ -76,13 +81,43 @@ app.get('/calculate-distance', function (req, res) {
     request(options, function (error, response, body) {
         if (error) throw new Error(error);
 
-        let obj = JSON.parse(body);
 
-        console.log(obj);
+        let obj = JSON.parse(body)
+        obj = obj['businesses']
+
+        let results = {'stops': []}
+
+        var i;
+        for (i = 0; i < obj.length; i+=1){
+            let currObj = obj[i];
+
+            let dict = {'name':currObj['name'], 'image_url':currObj['image_url'], 'coordinates':currObj['coordinates'], 'rating':currObj['rating'], 'url':currObj['url'], 'review_count':currObj['review_count'], 'phone':currObj['phone']}
+            results['stops'].push(dict)
+        }
+      //console.log(results);
+        res.send(results);
+
+
     });
 
+})
 
-    res.send("BACKEND GOT:" + "");
+app.get('/spotifunk', function(req, res){
+    var options = { method: 'GET',
+        url: 'https://accounts.spotify.com/authorize',
+        qs:
+            { client_id: '682367fe3a8a41a0b81f34dc5c6fe936',
+                response_type: 'code',
+                redirect_uri: 'http://localhost:3000/' },
+        headers:
+            { 'Postman-Token': '25df2b73-ed37-43b1-894d-09b811658c1e',
+                'cache-control': 'no-cache' } };
+
+    request(options, function (error, response, body) {
+        if (error) throw new Error(error);
+
+        console.log(body);
+    });
 
 })
 
