@@ -2,14 +2,13 @@ import {Map, Marker, GoogleApiWrapper, Polyline} from 'google-maps-react';
 import React from 'react'
 import PlacesAutocomplete from 'react-places-autocomplete';
 import 'antd/dist/antd.css';
-import querystring from 'querystring';
 import { Input, Button, Radio, Card, Checkbox, Select } from 'antd';
-import {
-    geocodeByAddress,
-    getLatLng,
-} from 'react-places-autocomplete';
+import { withRouter } from 'react-router-dom';
+import {geocodeByAddress, getLatLng} from 'react-places-autocomplete';
 import '../stylesheets/App.css'
+import './Spotifunk'
 import request from 'request'
+import Spotifunk from "./Spotifunk";
 
 const CheckboxGroup = Checkbox.Group;
 const Option = Select.Option;
@@ -66,6 +65,7 @@ export class MapContainer extends React.Component {
             optimizeWaypoints: true,
             travelMode: this.props.google.maps.TravelMode.DRIVING,
         }, (result, status) => {
+            console.log("RESULT", result.routes[0])
             var bounds = new this.props.google.maps.LatLngBounds();
             try{
                 const all_steps = (result.routes[0].overview_path)
@@ -112,32 +112,6 @@ export class MapContainer extends React.Component {
         }.bind(this));
     }
 
-    //redirects you to the login page for Spotify
-    //only works if you are currently not logged into Spotify.
-    login() {
-        const generateRandomString = function (length) {
-            let text = '';
-            const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-            for (let i = 0; i < length; i += 1) {
-                text += possible.charAt(Math.floor(Math.random() * possible.length));
-            }
-            return text;
-        };
-
-        const state = generateRandomString(16);
-        const scope = 'user-read-private user-read-email playlist-read-private playlist-modify-private playlist-modify-public playlist-read-collaborative';
-        window.open(`https://accounts.spotify.com/authorize?${
-            querystring.stringify({
-                response_type: 'code',
-                client_id: '682367fe3a8a41a0b81f34dc5c6fe936',
-                scope,
-                redirect_uri: 'http://localhost:3000/' ,
-                state})
-            })}`, '_self');
-
-
-    }
 
     setWayPoint(lat, lng){
         this.setState({waypoints:[...this.state.waypoints, {
@@ -159,88 +133,88 @@ export class MapContainer extends React.Component {
             <div class="flex-container">
 
                 <div class="flex-container-div-left">
-                    <h1>Tripster</h1>
-                <PlacesAutocomplete
-                    value={this.state.origin_address}
-                    onChange={this.handleChangeOrigin}
-                    onSelect={this.handleSelectOrigin}
-                >
-                    {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-                        <div>
-                            <Input
-                                {...getInputProps({
-                                    placeholder: 'Origin',
-                                    className: 'location-search-input',
-                                })}
-                            />
-                            <div className="autocomplete-dropdown-container">
-                                {loading && <div>Loading...</div>}
-                                {suggestions.map(suggestion => {
-                                    const className = suggestion.active
-                                        ? 'suggestion-item--active'
-                                        : 'suggestion-item';
-                                    // inline style for demonstration purpose
-                                    const style = suggestion.active
-                                        ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                                        : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                                    return (
-                                        <div
-                                            {...getSuggestionItemProps(suggestion, {
-                                                className,
-                                                style,
-                                            })}
-                                        >
-                                            <span>{suggestion.description}</span>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    )}
-                </PlacesAutocomplete>
 
-                <PlacesAutocomplete
-                    value={this.state.destination_address}
-                    onChange={this.handleChangeDestination}
-                    onSelect={this.handleSelectDestination}
-                >
-                    {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-                        <div>
-                            <Input
-                                {...getInputProps({
-                                    placeholder: 'Destination',
-                                    className: 'location-search-input',
-                                })}
-                            />
-                            <div className="autocomplete-dropdown-container">
-                                {loading && <div>Loading...</div>}
-                                {suggestions.map(suggestion => {
-                                    const className = suggestion.active
-                                        ? 'suggestion-item--active'
-                                        : 'suggestion-item';
-                                    // inline style for demonstration purpose
-                                    const style = suggestion.active
-                                        ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                                        : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                                    return (
-                                        <div
-                                            {...getSuggestionItemProps(suggestion, {
-                                                className,
-                                                style,
-                                            })}
-                                        >
-                                            <span>{suggestion.description}</span>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    )}
-                </PlacesAutocomplete>
-                    <br/>
+
                     <Card
                         title="Tripster Stops"
                     >
+                        <PlacesAutocomplete
+                            value={this.state.origin_address}
+                            onChange={this.handleChangeOrigin}
+                            onSelect={this.handleSelectOrigin}
+                        >
+                            {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                                <div>
+                                    <Input
+                                        {...getInputProps({
+                                            placeholder: 'Origin',
+                                            className: 'location-search-input',
+                                        })}
+                                    />
+                                    <div className="autocomplete-dropdown-container">
+                                        {loading && <div>Loading...</div>}
+                                        {suggestions.map(suggestion => {
+                                            const className = suggestion.active
+                                                ? 'suggestion-item--active'
+                                                : 'suggestion-item';
+                                            // inline style for demonstration purpose
+                                            const style = suggestion.active
+                                                ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                                : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                                            return (
+                                                <div
+                                                    {...getSuggestionItemProps(suggestion, {
+                                                        className,
+                                                        style,
+                                                    })}
+                                                >
+                                                    <span>{suggestion.description}</span>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+                        </PlacesAutocomplete>
+
+                        <PlacesAutocomplete
+                            value={this.state.destination_address}
+                            onChange={this.handleChangeDestination}
+                            onSelect={this.handleSelectDestination}
+                        >
+                            {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                                <div>
+                                    <Input
+                                        {...getInputProps({
+                                            placeholder: 'Destination',
+                                            className: 'location-search-input',
+                                        })}
+                                    />
+                                    <div className="autocomplete-dropdown-container">
+                                        {loading && <div>Loading...</div>}
+                                        {suggestions.map(suggestion => {
+                                            const className = suggestion.active
+                                                ? 'suggestion-item--active'
+                                                : 'suggestion-item';
+                                            // inline style for demonstration purpose
+                                            const style = suggestion.active
+                                                ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                                : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                                            return (
+                                                <div
+                                                    {...getSuggestionItemProps(suggestion, {
+                                                        className,
+                                                        style,
+                                                    })}
+                                                >
+                                                    <span>{suggestion.description}</span>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+                        </PlacesAutocomplete>
                         <CheckboxGroup
                             options={tripster_stops}
                             onChange={stops => this.setState({stops})}
@@ -272,8 +246,7 @@ export class MapContainer extends React.Component {
                         </Button>
 
                     </Card>
-                    <Button type="primary" onClick={() => this.login()}>Spotifunk</Button>
-
+                    <Spotifunk/>
                 </div>
 
                 <div class="flex-container-div-right">
@@ -302,4 +275,4 @@ export class MapContainer extends React.Component {
 
 export default GoogleApiWrapper({
     apiKey: ("AIzaSyChbG4vc4a01alWP7RYrMvWd911uhGzOdo")
-})(MapContainer)
+})(withRouter(MapContainer))
