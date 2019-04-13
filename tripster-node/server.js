@@ -111,7 +111,7 @@ app.get('/spotifunk', function(req, res){
         code: code,
         url: 'https://accounts.spotify.com/api/token',
         form: {
-            redirect_uri: 'http://localhost:3000/',
+            redirect_uri: 'http://localhost:8888/callback',
             grant_type: 'authorization_code'
         },
         headers: {
@@ -127,7 +127,7 @@ app.get('/spotifunk', function(req, res){
         } else {
             refresh_token = "invalid refresh token";
         }
-        res.redirect(`${credentials.frontend_url}/dashboard?refresh_token=${refresh_token}`)
+        res.redirect(`http://localhost:3000/plan-trip?refresh_token=${refresh_token}`)
     });
 
 })
