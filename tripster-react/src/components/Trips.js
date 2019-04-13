@@ -7,6 +7,9 @@ import cookie from 'react-cookies'
 
 
 export class Trips extends React.Component {
+    createNewTrip(){
+        this.props.history.push("/plan-trip")
+    }
     renderTrips(){
         let trips = []
         const obj = {"name": "Chicago Adventure", "date": "Feb 3"}
@@ -46,7 +49,7 @@ export class Trips extends React.Component {
                     }}
                 >
                     <p className="trip-name">+</p>
-                    <Button>Create a New Trip</Button>
+                    <Button onClick={() => this.createNewTrip()}>Create a New Trip</Button>
                 </Card>
             </div>
         )

@@ -1,14 +1,15 @@
-import {Map, Marker, GoogleApiWrapper, Polyline} from 'google-maps-react';
+import {Map, Marker, GoogleApiWrapper, Polyline, InfoWindow} from 'google-maps-react';
 import React from 'react'
 import PlacesAutocomplete from 'react-places-autocomplete';
 import 'antd/dist/antd.css';
-import { Input, Button, Radio, Card, Checkbox, Select } from 'antd';
+import { Input, Button, Radio, Card, Checkbox, Select, Calendar, Popover, Icon} from 'antd';
 import { withRouter } from 'react-router-dom';
 import {geocodeByAddress, getLatLng} from 'react-places-autocomplete';
 import '../stylesheets/App.css'
 import './Spotifunk'
 import request from 'request'
 import Spotifunk from "./Spotifunk";
+import cookie from "react-cookies";
 
 const CheckboxGroup = Checkbox.Group;
 const Option = Select.Option;
@@ -94,7 +95,6 @@ export class MapContainer extends React.Component {
             headers:
                 { 'Postman-Token': '172aa67b-54c6-4116-9000-9a22e9480045',
                     'cache-control': 'no-cache' } };
-        console.log("SENDING REQUEST")
         request(options, function (error, response, body) {
             if (error) throw new Error(error);
 
@@ -103,6 +103,8 @@ export class MapContainer extends React.Component {
 
             const additional_markers = json_stops.map((stop) =>
                 <Marker
+                    onMouseover={this.displayInfoWindow}
+                    stop={stop}
                     key={stop.image_url}
                     position={{lat: stop.coordinates.latitude, lng: stop.coordinates.longitude}}
                     onClick={() => this.setWayPoint(stop.coordinates.latitude, stop.coordinates.longitude)}
@@ -113,6 +115,23 @@ export class MapContainer extends React.Component {
         }.bind(this));
     }
 
+    displayInfoWindow = (props, marker, e) => {
+        console.log(props.stop)
+        const infoWindow = (
+            <InfoWindow
+                marker={marker}
+                visible={true} >
+                <div>
+                    <h3><a href={props.stop.url}>{props.stop.name}</a></h3>
+                    <img src={props.stop.image_url} height="20%" width="20%" />
+                    <p>Rating: {props.stop.rating}/5.0</p>
+                    <p>{props.stop.phone}</p>
+
+                </div>
+            </InfoWindow>
+        )
+        this.setState({infoWindow})
+    }
 
     setWayPoint(lat, lng){
         this.setState({waypoints:[...this.state.waypoints, {
@@ -120,6 +139,11 @@ export class MapContainer extends React.Component {
                 stopover: true
             }]});
         this.calculate_distance()
+    }
+
+    onChange(value){
+        console.log(value)
+        console.log(value._d.toISOString())
     }
 
     render() {
@@ -130,8 +154,19 @@ export class MapContainer extends React.Component {
             { label: 'Restaurants', value: 'Restaurants' },
             { label: 'Hotels & Travel', value: 'Hotels & Travel' },
         ];
+        const content = (
+            <div style={{ width: 300, border: '1px solid #d9d9d9', borderRadius: 4 }}>
+                <Calendar fullscreen={false} onChange={(value) => this.onChange(value)} />
+            </div>
+        )
         return (
+            <div>
+                <Input style={{"width": "90%", "border-right": "10px"}} placeholder={"Enter a name of your trip"} onChange={(event) => this.setState({trip_event: event.target.value})}/>
+                <Popover content={content} title="Travel Date" trigger="click">
+                    <Icon type="calendar" />
+                </Popover>
             <div class="flex-container">
+
 
                 <div class="flex-container-div-left">
 
@@ -265,9 +300,12 @@ export class MapContainer extends React.Component {
                             strokeOpacity={4}
                             strokeWeight={10}
                         />
+                        {this.state.infoWindow}
+
                     </Map>
 
                 </div>
+            </div>
             </div>
 
         );
