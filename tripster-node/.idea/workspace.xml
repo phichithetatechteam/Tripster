@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0a5978b2-5985-4577-a601-417ad2f5c74f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../tripster-react/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../tripster-react/react-facebook-login" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tripster-react/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../tripster-react/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tripster-react/package-lock.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../tripster-react/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../tripster-react/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tripster-react/src/components/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tripster-react/src/components/Home.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -153,7 +149,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1933000" />
+    <option name="totallyTimeSpent" value="2233000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="9" y="25" width="1118" height="724" extended-state="0" />
