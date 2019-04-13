@@ -1,7 +1,10 @@
 import React from "react";
 import { withRouter } from 'react-router-dom';
-import { Card, Button } from 'antd';
+import { Card, Button, Menu, Dropdown } from 'antd';
 import "../stylesheets/trips.css"
+import cookie from 'react-cookies'
+
+
 
 export class Trips extends React.Component {
     renderTrips(){
@@ -51,9 +54,39 @@ export class Trips extends React.Component {
         renderTrips.push(newTripCard)
         return renderTrips
     }
+
+    componentDidMount(){
+        if (!cookie.load("isLoggedIn")){
+            this.props.history.push("/")
+        }
+    }
+
+    logout(){
+        cookie.remove("isLoggedIn")
+        cookie.remove("userID")
+        cookie.remove("name")
+        cookie.remove("email")
+        cookie.remove("picture")
+        this.props.history.push("/")
+    }
+
+
     render() {
+        const menu = (
+            <Menu>
+                <Menu.Item>
+                    <p>Email: {cookie.load("email")}</p>
+                </Menu.Item>
+                <Menu.Item>
+                    <a onClick={() => this.logout()}>Logout</a>
+                </Menu.Item>
+            </Menu>
+        );
         return (
             <div>
+                <Dropdown overlay={menu}>
+                    <img src={cookie.load("picture")} />
+                </Dropdown>
                 <h1>Your Trips!</h1>
                 <div className="trips-container">
                     {this.renderTrips()}

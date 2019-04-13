@@ -3,6 +3,7 @@ import FacebookLogin from 'react-facebook-login';
 import {Button, Card} from "antd";
 import { withRouter } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
+import cookie from 'react-cookies'
 
 export class Home extends React.Component {
 
@@ -15,7 +16,7 @@ export class Home extends React.Component {
     }
 
     responseFacebook = response => {
-        // console.log(response);
+        console.log(response);
 
         this.setState({
             isLoggedIn: true,
@@ -34,7 +35,11 @@ export class Home extends React.Component {
 
         if (this.state.isLoggedIn) {
             // return <Redirect to='/trips' />
-
+            cookie.save('isLoggedIn', this.state.isLoggedIn)
+            cookie.save('userID', this.state.userID)
+            cookie.save('name', this.state.name)
+            cookie.save('email', this.state.email)
+            cookie.save('picture', this.state.picture)
             this.props.history.push('/trips');
         }
 
@@ -44,7 +49,9 @@ export class Home extends React.Component {
                 autoLoad={true}
                 fields="name,email,picture"
                 onClick={this.componentClicked}
-                callback={this.responseFacebook} />);
+                callback={this.responseFacebook}
+                onFailure={() => this.props.history.push("/")}
+                />);
         }
 
         return (
