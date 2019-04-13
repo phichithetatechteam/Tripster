@@ -5,6 +5,9 @@ const mongoClient = require('mongodb').MongoClient
 var cors = require('cors')
 var request = require("request");
 
+var clientid = '682367fe3a8a41a0b81f34dc5c6fe936'
+var clientsecret = '96b5123b508a42f4b450b9b600341ab6'
+
 
 
 const dbFunctions = require('./functions/db_functions')
@@ -103,22 +106,6 @@ app.get('/calculate-distance', function (req, res) {
 })
 
 app.get('/spotifunk', function(req, res){
-    var options = { method: 'GET',
-        url: 'https://accounts.spotify.com/authorize',
-        qs:
-            { client_id: '682367fe3a8a41a0b81f34dc5c6fe936',
-                response_type: 'code',
-                redirect_uri: 'http://localhost:3000/' },
-        headers:
-            { 'Postman-Token': '25df2b73-ed37-43b1-894d-09b811658c1e',
-                'cache-control': 'no-cache' } };
-
-    request(options, function (error, response, body) {
-        if (error) throw new Error(error);
-
-        console.log(body);
-    });
-
     var code = req.query.code || null
     var authOptions = {
         code: code,
@@ -144,6 +131,38 @@ app.get('/spotifunk', function(req, res){
     });
 
 })
+
+app.get('/callback', function(req, res){
+    var code = req.query.code || null
+    console.log(code);
+
+    var authOptions = {
+        url: 'https://accounts.spotify.com/api/token',
+        form: {
+            code: code,
+            redirect_uri: 'http://localhost:8888/callback',
+            grant_type: 'authorization_code'
+        },
+        headers: {
+            'Authorization': 'Basic ' + (new Buffer(clientid + ':' + clientsecret).toString('base64'))
+        },
+        json: true
+    };
+    request.post(authOptions, function(error, response, body) {
+        let refresh_token = '';
+        if (!error && response.statusCode === 200) {
+            refresh_token = body.refresh_token;
+        } else {
+            refresh_token = "invalid refresh token";
+        }
+        console.log(body);
+        res.redirect(`${'http://localhost:3000/plan-trip'}?refresh_token=${refresh_token}`)
+    });
+});
+
+function spotifunkRocks(refresh_token) {
+
+}
 
 
 function middlePoint(lat1, lng1, lat2, lng2) {
