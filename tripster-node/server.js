@@ -152,6 +152,7 @@ app.get('/callback', function(req, res){
         let refresh_token = '';
         if (!error && response.statusCode === 200) {
             refresh_token = body.refresh_token;
+            let access_token = body.access_token;
         } else {
             refresh_token = "invalid refresh token";
         }
@@ -161,8 +162,63 @@ app.get('/callback', function(req, res){
 });
 
 function spotifunkRocks(refresh_token) {
-
+    const encodedClient = Buffer.from(`${clientid}:${clientsecret}`).toString('base64');
+    var options = {
+        method: 'POST',
+        url: 'https://accounts.spotify.com/api/token',
+        headers: {
+            Authorization: `Basic ${encodedClient}`,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        form: {
+            refresh_token: refresh_token,
+            grant_type: 'refresh_token'
+        }
+    };
+    return new Promise(function(resolve, reject) {
+        request(options, function (error, response, body) {
+            if (response.statusCode === 400){
+                reject(JSON.parse(body))
+            } else {
+                const new_access_token = JSON.parse(body).access_token
+                resolve(new_access_token)
+            }
+        });
+    })
 }
+
+function topTen(access_token){
+    var headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${access_token}`
+    };
+    var options = {
+        method: 'GET',
+        headers: headers,
+        url: `https://api.spotify.com/v1/me/top/tracks?limit=10`,
+    };
+    return new Promise(function(resolve, reject) {
+        request(options, function (error, response, body) {
+            resolve(body)
+        });
+    });
+}
+
+
+
+var x = spotifunkRocks('AQDkcEWI0LY8KA8GuxvubvdGv3b-sHiZDKPzu-Va3LNplAI0_LpclhgVyJizE_yDy-rLrq48XtjF6oXVzTPIjDDPEk60oSkXoCivtGfwTTK8KahdrUPdOsrqNkf__BoPZLbALA')
+x.then(access_token => {
+    console.log(access_token)
+    var y = topTen(access_token)
+    y.then(playlists => {
+        console.log(playlists)
+    })
+})
+
+
+
+
 
 
 function middlePoint(lat1, lng1, lat2, lng2) {
