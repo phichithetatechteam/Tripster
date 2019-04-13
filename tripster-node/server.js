@@ -205,18 +205,30 @@ function topTen(access_token){
     });
 }
 
-
-
 var x = spotifunkRocks('AQDkcEWI0LY8KA8GuxvubvdGv3b-sHiZDKPzu-Va3LNplAI0_LpclhgVyJizE_yDy-rLrq48XtjF6oXVzTPIjDDPEk60oSkXoCivtGfwTTK8KahdrUPdOsrqNkf__BoPZLbALA')
 x.then(access_token => {
-    console.log(access_token)
+    //console.log(access_token)
     var y = topTen(access_token)
-    y.then(playlists => {
-        console.log(playlists)
+    y.then(top_songs => {
+        console.log(top_songs)
+        console.log(makePlaylist(top_songs));
     })
+
 })
 
 
+
+function makePlaylist(x) {
+    let obj = JSON.parse(x);
+    var y = obj['items'];
+    var playlist = {};
+    for(var i=0; i<obj['total']; i++) {
+        var songUri = y[i]['uri'];
+        var songName = y[i]['name'];
+        playlist[songName] = songUri;
+    }
+    return playlist;
+}
 
 
 
