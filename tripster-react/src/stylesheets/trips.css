@@ -1,0 +1,29 @@
+.trips-container{
+    display:-webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.trip-item{
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.trip-name{
+    font-family: biotif-extrabold;
+    font-size: 20px;
+    margin-bottom: 0px;
+    text-overflow: clip;
+
+}
+
+.trip-content{
+    font-family: biotif-bold;
+    font-size: 10px;
+    padding-bottom: 10px;
+}

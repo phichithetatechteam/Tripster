@@ -102,22 +102,7 @@ app.get('/calculate-distance', function (req, res) {
 
 })
 
-app.get('/spotifunk', function(req, res){
-    var options = { method: 'GET',
-        url: 'https://accounts.spotify.com/authorize',
-        qs:
-            { client_id: '682367fe3a8a41a0b81f34dc5c6fe936',
-                response_type: 'code',
-                redirect_uri: 'http://localhost:3000/' },
-        headers:
-            { 'Postman-Token': '25df2b73-ed37-43b1-894d-09b811658c1e',
-                'cache-control': 'no-cache' } };
-
-    request(options, function (error, response, body) {
-        if (error) throw new Error(error);
-
-        console.log(body);
-    });
+app.get("/authenticate", function (req, res) {
 
 })
 
