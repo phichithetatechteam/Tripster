@@ -84,9 +84,12 @@ export class Trips extends React.Component {
         );
         return (
             <div>
-                <Dropdown overlay={menu}>
-                    <img src={cookie.load("picture")} />
-                </Dropdown>
+                <div >
+                    <Dropdown overlay={menu} >
+                        <img src={cookie.load("picture")} />
+                    </Dropdown>
+                </div>
+
                 <h1>Your Trips!</h1>
                 <div className="trips-container">
                     {this.renderTrips()}

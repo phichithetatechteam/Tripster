@@ -94,6 +94,7 @@ export class MapContainer extends React.Component {
             headers:
                 { 'Postman-Token': '172aa67b-54c6-4116-9000-9a22e9480045',
                     'cache-control': 'no-cache' } };
+        console.log("SENDING REQUEST")
         request(options, function (error, response, body) {
             if (error) throw new Error(error);
 
