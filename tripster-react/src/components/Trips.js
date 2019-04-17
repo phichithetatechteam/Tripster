@@ -86,19 +86,43 @@ export class Trips extends React.Component {
             </Menu>
         );
         return (
-            <div>
-                <div >
+          <section className="hero is-light is-fullheight">
+
+            <div className="hero-head">
+
+              <nav className="navbar" role="navigation" aria-label="main navigation">
+                <div className="navbar-brand">
+                  <a className="navbar-item">
+                    <img src="../images/tripster.png" width="112" height="28"/>
+                  </a>
+                </div>
+                <div className="navbar-menu">
+
+                </div>
+                <div className="navbar-end">
+                  <a className="navbar-item">
                     <Dropdown overlay={menu} >
-                        <img src={cookie.load("picture")} />
+                      <img src={cookie.load("picture")} />
                     </Dropdown>
+                  </a>
                 </div>
 
-                <h1>Your Trips!</h1>
-                <div className="trips-container">
-                    {this.renderTrips()}
-                </div>
+              </nav>
 
             </div>
+
+            <div class="hero-body">
+
+              <div className="trips-container">
+                {this.renderTrips()}
+              </div>
+
+            </div>
+
+            <div className="hero-foot">
+            </div>
+
+          </section>
 
         );
     }

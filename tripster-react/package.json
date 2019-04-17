@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "antd": "^3.16.1",
+    "bulma": "^0.7.4",
     "google-maps-react": "^2.0.2",
     "history": "^4.9.0",
     "react": "^16.8.4",
