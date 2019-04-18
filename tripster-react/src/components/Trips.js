@@ -21,16 +21,17 @@ export class Trips extends React.Component {
                 <Card
                     type="inner"
                     style={{
-                        backgroundColor: '#d4ecdc',
-                        width: '300px',
+                        backgroundColor: '#CDC29E',
+                        width: '323.5px',
+                        height: '130px',
                         textAlign: 'center',
                         margin: '0px',
                         borderRadius: '10px',
                     }}
                 >
-                    <p className="trip-name">{trip.name}</p>
-                    <p className="trip-content">{trip.date}</p>
-                    <Button>View Trip</Button>
+                    <p className="trip-name is-family-primary">{trip.name}</p>
+                    <p className="trip-content is-family-secondary">{trip.date}</p>
+                    <Button className="is-family-primary">View Trip</Button>
                 </Card>
             </div>
         ));
@@ -40,15 +41,17 @@ export class Trips extends React.Component {
                     type="inner"
                     bordered={true}
                     style={{
-                        backgroundColor: 'blue',
-                        width: '300px',
+                        backgroundColor: '#7B715B',
+                        width: '323.5px',
+                        height: '130px',
                         textAlign: 'center',
                         margin: '0px',
                         borderRadius: '10px',
                         borderStyle: 'dashed !important'
                     }}
                 >
-                    <p className="trip-name">+</p>
+                    <p className="trip-name has-text-weight-bold has-text-white-bis is-size-4">+</p>
+                    <h1> </h1>
                     <Button onClick={() => this.createNewTrip()}>Create a New Trip</Button>
                 </Card>
             </div>
@@ -117,9 +120,6 @@ export class Trips extends React.Component {
                 {this.renderTrips()}
               </div>
 
-            </div>
-
-            <div className="hero-foot">
             </div>
 
           </section>

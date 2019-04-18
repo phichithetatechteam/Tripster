@@ -60,7 +60,7 @@ export class Home extends React.Component {
                     <nav className="navbar" role="navigation" aria-label="main navigation">
                         <div className="navbar-brand">
                             <a className="navbar-item">
-                                <img src="tripster.jpg" alt="Logo"/>
+                                <img src="../images/tripster.png"/>
 
                             </a>
                         </div>
@@ -112,15 +112,6 @@ export class Home extends React.Component {
 
                 </div>
 
-                <div class="hero-foot">
-                    <footer className="footer">
-                        <div className="content has-text-centered">
-                            <p>
-                                <strong>Created by Tripster: Use scss & variables to edit footer size</strong>
-                            </p>
-                        </div>
-                    </footer>
-                </div>
 
             </section>
 

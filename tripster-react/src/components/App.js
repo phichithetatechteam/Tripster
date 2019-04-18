@@ -161,7 +161,7 @@ export class MapContainer extends React.Component {
         )
         return (
             <div>
-                <Input style={{"width": "90%", "border-right": "10px"}} placeholder={"Enter a name of your trip"} onChange={(event) => this.setState({trip_event: event.target.value})}/>
+                <Input style={{"width": "90%", "border-right": "10px"}} placeholder={"Enter a name for your trip"} onChange={(event) => this.setState({trip_event: event.target.value})}/>
                 <Popover content={content} title="Travel Date" trigger="click">
                     <Icon type="calendar" />
                 </Popover>
@@ -171,7 +171,7 @@ export class MapContainer extends React.Component {
                 <div class="flex-container-div-left">
 
 
-                    <Card
+                    <Card class="is-size-1"
                         title="Tripster Stops"
                     >
                         <PlacesAutocomplete
@@ -251,10 +251,12 @@ export class MapContainer extends React.Component {
                                 </div>
                             )}
                         </PlacesAutocomplete>
+                        <p></p>
                         <CheckboxGroup
                             options={tripster_stops}
                             onChange={stops => this.setState({stops})}
                         />
+                        <p></p>
                         <a className={"sort-by"}>Sort By: </a>
 
                         <Select defaultValue={"best_match"} style={{width: 150}} max={51} onChange={(sort_by) => this.setState({sort_by})}>
@@ -265,6 +267,7 @@ export class MapContainer extends React.Component {
                         </Select>
 
                         <br/>
+                        <p></p>
 
                         <Radio.Group defaultValue="1" buttonStyle="solid" onChange={price => this.setState({price: price.target.value})}>
                             <Radio.Button value="1">$</Radio.Button>
