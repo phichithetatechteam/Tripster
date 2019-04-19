@@ -81,7 +81,7 @@ export class Trips extends React.Component {
                     <p>Email: {cookie.load("email")}</p>
                 </Menu.Item>
                 <Menu.Item>
-                    <a onClick={() => this.logout()}>Logout</a>
+                    <Button onClick={() => this.logout()}>Logout</Button>
                 </Menu.Item>
             </Menu>
         );
@@ -89,7 +89,7 @@ export class Trips extends React.Component {
             <div>
                 <div >
                     <Dropdown overlay={menu} >
-                        <img src={cookie.load("picture")} />
+                        <img src={cookie.load("picture")} alt=""/>
                     </Dropdown>
                 </div>
 

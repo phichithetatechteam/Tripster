@@ -86,6 +86,7 @@ app.get('/calculate-distance', function (req, res) {
 
 
         let obj = JSON.parse(body)
+        console.log(obj)
         obj = obj['businesses']
 
         let results = {'stops': []}

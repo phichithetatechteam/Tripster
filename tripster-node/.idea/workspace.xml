@@ -3,9 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="0a5978b2-5985-4577-a601-417ad2f5c74f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../tripster-react/src/components/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tripster-react/src/components/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tripster-react/src/components/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tripster-react/src/components/Home.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tripster-react/src/components/Spotifunk.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tripster-react/src/components/Spotifunk.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../tripster-react/src/components/Trips.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tripster-react/src/components/Trips.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tripster-react/src/stylesheets/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/../tripster-react/src/stylesheets/App.css" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -43,12 +45,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="js" value="148" />
+          <entry key="js" value="164" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JavaScript" value="148" />
+          <entry key="JavaScript" value="164" />
         </counts>
       </usages-collector>
     </session>
@@ -58,8 +60,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="101">
-              <caret line="113" column="20" selection-start-line="113" selection-start-column="12" selection-end-line="113" selection-end-column="20" />
+            <state relative-caret-position="97">
+              <caret line="88" column="23" selection-start-line="88" selection-start-column="23" selection-end-line="88" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -72,6 +74,7 @@
       <find>listen</find>
       <find>server</find>
       <find>redirect</find>
+      <find>obj</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -156,12 +159,12 @@
       <updated>1554837348421</updated>
       <workItem from="1554837352346" duration="724000" />
       <workItem from="1555165783842" duration="1179000" />
-      <workItem from="1555645701897" duration="640000" />
+      <workItem from="1555645701897" duration="2441000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5363000" />
+    <option name="totallyTimeSpent" value="7164000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1543" y="70" width="1118" height="724" extended-state="0" />
@@ -196,8 +199,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/server.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="101">
-          <caret line="113" column="20" selection-start-line="113" selection-start-column="12" selection-end-line="113" selection-end-column="20" />
+        <state relative-caret-position="97">
+          <caret line="88" column="23" selection-start-line="88" selection-start-column="23" selection-end-line="88" selection-end-column="23" />
         </state>
       </provider>
     </entry>
