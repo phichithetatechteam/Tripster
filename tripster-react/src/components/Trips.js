@@ -40,7 +40,7 @@ export class Trips extends React.Component {
                     type="inner"
                     bordered={true}
                     style={{
-                        backgroundColor: 'blue',
+                        backgroundColor: '#add8e6',
                         width: '300px',
                         textAlign: 'center',
                         margin: '0px',

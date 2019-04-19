@@ -1,23 +1,29 @@
 import React from "react";
 import FacebookLogin from 'react-facebook-login';
-import {Button, Card} from "antd";
 import { withRouter } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
 import cookie from 'react-cookies'
 
 export class Home extends React.Component {
 
-    state = {
-        isLoggedIn: false,
-        userID: '',
-        name: '',
-        email: '',
-        picture: ''
+    constructor(props){
+        super(props)
+        this.state = {
+            isLoggedIn: false,
+            userID: '',
+            name: '',
+            email: '',
+            picture: ''
+        }
     }
 
-    responseFacebook = response => {
-        console.log(response);
 
+
+    responseFacebook(response) {
+        cookie.save('isLoggedIn', true)
+        cookie.save('userID', response.userID)
+        cookie.save('name', response.name)
+        cookie.save('email', response.email)
+        cookie.save('picture', response.picture.data.url)
         this.setState({
             isLoggedIn: true,
             userID: response.userID,
@@ -25,40 +31,26 @@ export class Home extends React.Component {
             email: response.email,
             picture: response.picture.data.url
         });
+        this.props.history.push('/trips');
     }
 
-    componentClicked = () => console.log("clicked");
-
-    render() {
-
-        let fbContent;
-
-        if (this.state.isLoggedIn) {
-            // return <Redirect to='/trips' />
-            cookie.save('isLoggedIn', this.state.isLoggedIn)
-            cookie.save('userID', this.state.userID)
-            cookie.save('name', this.state.name)
-            cookie.save('email', this.state.email)
-            cookie.save('picture', this.state.picture)
+    componentDidMount(){
+        if(cookie.load('isLoggedIn')){
             this.props.history.push('/trips');
         }
+    }
 
-        else {
-            fbContent = (<FacebookLogin
-                appId="242487039919018"
-                autoLoad={true}
-                fields="name,email,picture"
-                onClick={this.componentClicked}
-                callback={this.responseFacebook}
-                onFailure={() => this.props.history.push("/")}
-                />);
-        }
-
+    render() {
         return (
             <div>
                 <h1>Welcome to Tripster</h1>
-                {fbContent}
-
+                <FacebookLogin
+                    appId="242487039919018"
+                    autoLoad={false}
+                    fields="name,email,picture"
+                    callback={response => this.responseFacebook(response)}
+                    onFailure={() => this.props.history.push("/")}
+                />
             </div>
 
         );

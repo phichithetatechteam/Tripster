@@ -26,7 +26,8 @@ export class MapContainer extends React.Component {
             addition_markers: undefined,
             sort_by: 'best_match',
             price: 1,
-            waypoints: []
+            waypoints: [],
+            waypoints_db_obj: []
         };
     }
     handleChangeOrigin = origin_address => {
@@ -66,7 +67,6 @@ export class MapContainer extends React.Component {
             optimizeWaypoints: true,
             travelMode: this.props.google.maps.TravelMode.DRIVING,
         }, (result, status) => {
-            console.log("RESULT", result.routes[0])
             var bounds = new this.props.google.maps.LatLngBounds();
             try{
                 const all_steps = (result.routes[0].overview_path)
@@ -116,7 +116,6 @@ export class MapContainer extends React.Component {
     }
 
     displayInfoWindow = (props, marker, e) => {
-        console.log(props.stop)
         const infoWindow = (
             <InfoWindow
                 marker={marker}
@@ -126,7 +125,8 @@ export class MapContainer extends React.Component {
                     <img src={props.stop.image_url} height="20%" width="20%" />
                     <p>Rating: {props.stop.rating}/5.0</p>
                     <p>{props.stop.phone}</p>
-
+                    <Button onClick={() => console.log("ADD STOP")}>Add Stop</Button>
+                    <Icon type="delete" theme="twoTone" twoToneColor="#eb2f96" onClick={() => console.log("DELETE STOP")}/>
                 </div>
             </InfoWindow>
         )
@@ -137,13 +137,36 @@ export class MapContainer extends React.Component {
         this.setState({waypoints:[...this.state.waypoints, {
                 location: new this.props.google.maps.LatLng(lat,lng),
                 stopover: true
+            }], waypoints_db_obj:[...this.state.waypoints_db_obj, {
+                lat,
+                lng
             }]});
         this.calculate_distance()
     }
 
-    onChange(value){
-        console.log(value)
-        console.log(value._d.toISOString())
+    saveTrip(){
+        const trip = {
+            name: this.state.trip_name,
+            date: this.state.trip_date,
+            email: cookie.load("email"),
+            origin: {
+                address: this.state.origin_address,
+                lat: this.state.origin_obj.lat,
+                lng: this.state.origin_obj.lng,
+            },
+            destination: {
+                address: this.state.destination_address,
+                lat: this.state.destination_obj.lat,
+                lng: this.state.destination_obj.lng,
+            },
+            activities: {
+                stops: this.state.stops,
+                sort_by: this.state.sort_by,
+                price: this.state.price,
+                waypoints: this.state.waypoints_db_obj
+            }
+        }
+        console.log(trip)
     }
 
     render() {
@@ -156,19 +179,19 @@ export class MapContainer extends React.Component {
         ];
         const content = (
             <div style={{ width: 300, border: '1px solid #d9d9d9', borderRadius: 4 }}>
-                <Calendar fullscreen={false} onChange={(value) => this.onChange(value)} />
+                <Calendar fullscreen={false} onChange={(date) => this.setState({trip_date: date._d.toISOString()})} />
             </div>
         )
         return (
             <div>
-                <Input style={{"width": "90%", "border-right": "10px"}} placeholder={"Enter a name of your trip"} onChange={(event) => this.setState({trip_event: event.target.value})}/>
+                <Input style={{"width": "90%", "borderRight": "10px"}} placeholder={"Enter a name of your trip"} onChange={(event) => this.setState({trip_name: event.target.value})}/>
                 <Popover content={content} title="Travel Date" trigger="click">
                     <Icon type="calendar" />
                 </Popover>
-            <div class="flex-container">
+            <div className="flex-container">
 
 
-                <div class="flex-container-div-left">
+                <div className="flex-container-div-left">
 
 
                     <Card
@@ -285,9 +308,9 @@ export class MapContainer extends React.Component {
                     <Spotifunk/>
                 </div>
 
-                <div class="flex-container-div-right">
+                <div className="flex-container-div-right">
 
-                    <Map className="googlemaps" google={this.props.google} zoom={5} bounds={this.state.bounds} center={{lat: this.state.origin_obj.lat, lng: this.state.origin_obj.lng}}>
+                    <Map className="googlemaps" google={this.props.google} zoom={5} bounds={this.state.bounds}>
                         <Marker
                             position={{lat: this.state.origin_obj.lat, lng: this.state.origin_obj.lng}} />
                         <Marker
@@ -305,7 +328,10 @@ export class MapContainer extends React.Component {
                     </Map>
 
                 </div>
+
+
             </div>
+                <Button onClick={() => this.saveTrip()}>Save Trip</Button>
             </div>
 
         );
