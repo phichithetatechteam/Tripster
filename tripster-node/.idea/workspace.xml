@@ -4,7 +4,7 @@
     <list default="true" id="0a5978b2-5985-4577-a601-417ad2f5c74f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tripster-react/src/components/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tripster-react/src/components/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tripster-react/src/components/Spotifunk.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tripster-react/src/components/Spotifunk.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -20,8 +20,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="301">
-              <caret line="224" column="22" selection-start-line="224" selection-start-column="22" selection-end-line="224" selection-end-column="22" />
+            <state relative-caret-position="374">
+              <caret line="184" column="52" selection-start-line="184" selection-start-column="52" selection-end-line="184" selection-end-column="52" />
             </state>
           </provider>
         </entry>
@@ -36,6 +36,7 @@
       <find>redirect</find>
       <find>topTen</find>
       <find>parse</find>
+      <find>spotifunk</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -48,10 +49,9 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
-    <option name="x" value="9" />
-    <option name="y" value="25" />
-    <option name="width" value="1419" />
+  <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
+    <option name="width" value="1466" />
     <option name="height" value="949" />
   </component>
   <component name="ProjectView">
@@ -107,17 +107,19 @@
       <workItem from="1555165783842" duration="1179000" />
       <workItem from="1555180088791" duration="3186000" />
       <workItem from="1555184259545" duration="2318000" />
+      <workItem from="1555282250910" duration="102000" />
+      <workItem from="1555773080439" duration="13061000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9272000" />
+    <option name="totallyTimeSpent" value="22435000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="6" />
+    <frame x="0" y="23" width="1466" height="949" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19309373" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16608997" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -131,7 +133,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.25060242" />
+      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.28588098" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -143,8 +145,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/server.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="301">
-          <caret line="224" column="22" selection-start-line="224" selection-start-column="22" selection-end-line="224" selection-end-column="22" />
+        <state relative-caret-position="374">
+          <caret line="184" column="52" selection-start-line="184" selection-start-column="52" selection-end-line="184" selection-end-column="52" />
         </state>
       </provider>
     </entry>
