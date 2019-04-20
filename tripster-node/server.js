@@ -172,9 +172,185 @@ app.get('/callback', function(req, res){
     });
 });
 
-function spotifunkRocks(refresh_token) {
+app.get('/top-10', function(req,res){
+    let refreshToken = req.query.refreshToken || null;
+    let accessTokenPromise = spotifunkRocks(refreshToken);
+
+    let finalAccess;
+
+    accessTokenPromise.then(access_token => {
+        console.log(access_token)
+        finalAccess = access_token;
+        var uid = getUserid(finalAccess)
+            uid.then(id => {
+                //console.log(id)
+                var playlistObj = createPlaylist(id['id'], finalAccess)
+                playlistObj.then( playlist => {
+                        var top_songs = topTen(access_token)
+                        top_songs.then( tenSongs => {
+                            //console.log(playlist)
+                            //console.log(makePlaylist(tenSongs))
+                            var finalPlaylist = addSongs(makePlaylist(tenSongs), playlist['id'], finalAccess)
+                            finalPlaylist.then(final =>{
+                                //console.log(final)
+                                console.log(playlist.id)
+                                res.send({'playlist_id':playlist.id,'user_id': id['id']})
+
+                            })
+                        })
+                    })
+            })
+
+
+
+
+    //     var y = topTen(access_token)
+    //         y.then(top_songs => {
+    //             //console.log(top_songs)
+    //             let top_10_uris = makePlaylist(top_songs);
+    //             res.send({data:top_10_uris});
+    // })
+
+
+    });
+});
+
+function addSongs (track_uri, playlist_id, access_token){
+    var options = { method: 'POST',
+        url: 'https://api.spotify.com/v1/playlists/' + playlist_id + '/tracks',
+        headers:
+            { 'Postman-Token': '973d0e0f-584c-41ca-8d12-0d5ce597d8a7',
+                'cache-control': 'no-cache',
+                'Content-Type': 'application/json',
+                scope: 'playlist-modify-public playlist-modify-private',
+                Authorization: `Bearer ${access_token}`},
+        body:
+            { uris:
+                    track_uri },
+        json: true };
+
+    return new Promise(function(resolve, reject) {
+        request(options, function (error, response, body) {
+            //console.log(body);
+            resolve(body);
+        });
+    });
+}
+
+function createPlaylist(userid, access_token) {
+    var options = { method: 'POST',
+        url: 'https://api.spotify.com/v1/users/'+userid+'/playlists',
+        headers:
+            { 'Postman-Token': '15314122-a613-4148-96c8-0d212014d639',
+                'cache-control': 'no-cache',
+                'Content-Type': 'application/json',
+                scope: 'playlist-modify-public playlist-modify-private',
+                Authorization: `Bearer ${access_token}`},
+        body: { name: 'Your Roadtripping Playlist', public: 'true' },
+        json: true };
+
+    return new Promise(function(resolve, reject) {
+        request(options, function (error, response, body) {
+            //console.log(body);
+            resolve(body);
+        });
+    });
 
 }
+
+
+function getUserid(access_token) {
+    var options = { method: 'GET',
+        json: true,
+        url: 'https://api.spotify.com/v1/me',
+        headers:
+            { 'Postman-Token': 'e51da337-9c1b-4aec-86f0-71eecc8ecdca',
+                'cache-control': 'no-cache',
+                Authorization: `Bearer ${access_token}`,
+                scope: 'user-read-email user-read-private user-read-birthdate' } };
+
+    return new Promise(function(resolve, reject) {
+        request(options, function (error, response, body) {
+            //console.log(body);
+            resolve(body);
+        });
+    });
+}
+
+
+
+function spotifunkRocks(refresh_token) {
+    //token swap from refresh to access
+    const encodedClient = Buffer.from(`${clientid}:${clientsecret}`).toString('base64');
+    var options = {
+        method: 'POST',
+        url: 'https://accounts.spotify.com/api/token',
+        headers: {
+            Authorization: `Basic ${encodedClient}`,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        form: {
+            refresh_token: refresh_token,
+            grant_type: 'refresh_token'
+        }
+    };
+    return new Promise(function(resolve, reject) {
+        request(options, function (error, response, body) {
+            if (response.statusCode === 400){
+                reject(JSON.parse(body))
+            } else {
+                const new_access_token = JSON.parse(body).access_token
+                resolve(new_access_token)
+            }
+        });
+    })
+}
+
+function topTen(access_token){
+    var headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${access_token}`
+    };
+    var options = {
+        method: 'GET',
+        headers: headers,
+        url: `https://api.spotify.com/v1/me/top/tracks?limit=10`,
+    };
+    return new Promise(function(resolve, reject) {
+        request(options, function (error, response, body) {
+            resolve(body)
+        });
+    });
+}
+
+// var x = spotifunkRocks('AQDkcEWI0LY8KA8GuxvubvdGv3b-sHiZDKPzu-Va3LNplAI0_LpclhgVyJizE_yDy-rLrq48XtjF6oXVzTPIjDDPEk60oSkXoCivtGfwTTK8KahdrUPdOsrqNkf__BoPZLbALA')
+// x.then(access_token => {
+//     //console.log(access_token)
+//     var y = topTen(access_token)
+//     y.then(top_songs => {
+//         console.log(top_songs)
+//         console.log(makePlaylist(top_songs));
+//     })
+//
+// })
+
+
+
+function makePlaylist(x) {
+    let obj = JSON.parse(x);
+    var items = obj['items'];
+    //console.log(items);
+    var uris = [];
+    for (var i = 0; i < obj['total']; i++){
+        var currUri = items[i]['uri'];
+        console.log(currUri)
+        uris.push(currUri)
+    }
+    return uris
+}
+
+
 
 
 function middlePoint(lat1, lng1, lat2, lng2) {
