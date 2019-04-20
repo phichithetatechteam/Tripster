@@ -7,7 +7,7 @@ var request = require("request");
 
 var clientid = '682367fe3a8a41a0b81f34dc5c6fe936'
 var clientsecret = '96b5123b508a42f4b450b9b600341ab6'
-
+var bodyParser = require('body-parser');
 
 
 const dbFunctions = require('./functions/db_functions')
@@ -16,7 +16,8 @@ const url = "mongodb+srv://pctzetatechteam:chiragiscool@tripster-602op.gcp.mongo
 // constants
 const app = express()
 app.use(cors())
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
 
 // start express server
 const server = app.listen(8888, () => console.log('Listening on Port 8888'))
@@ -40,8 +41,8 @@ app.get('/testdb', function(req,res){
     //console.log(response.collection.find())
 })
 app.post('/authenticate', function(req, res){
-    const response = dbFunctions.post_new_profile_entity(mongoClient, url, 'Tripster', 'accounts', req.query.name, req.query.email, req.query.picture, req.query.user_id);
-    console.log(req.query.name);
+    const response = dbFunctions.post_new_profile_entity(mongoClient, url, 'Tripster', 'accounts', req.body.name, req.body.email, req.body.picture, req.body.user_id);
+    console.log(req.body.name);
 
     response.then(function(resp){
         res.status(resp.status)
