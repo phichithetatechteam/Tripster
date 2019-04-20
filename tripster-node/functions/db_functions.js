@@ -46,7 +46,34 @@ module.exports = {
       })
     })
   },
+  post_trip_data: function (mongoClient, dbURL, dbName, dbCollection,body) {
+    return new Promise(function (resolve, reject) {
+      mongoClient.connect(dbURL, { useNewUrlParser: true }, function (err, client) {
+        if (isMongoConnected(err)) {
+          // Connect to database and collection
+          const db = client.db(dbName)
+          const collection = db.collection(dbCollection)
 
+          collection.findOne({"_id":body._id, "email":body.email}, function (collectionError, document) {
+            if (collectionError) {
+              reject(collectionError)
+            }
+            // if username not in collection - insert
+            if (document === null) {
+              collection.insertOne(body)
+              resolve({ 'status': 200, 'message': {success} }) // ok
+            } else { // username already in collection -
+              collection.updateOne({"_id":body._id, "email":body.email}, {$set:body} )
+              resolve({ 'status': 409, 'message': 'updated value' })
+            }
+          })
+          //} else { // Invalid Input
+          //resolve({ 'status': 422, 'message': 'Invalid Parameters' }) // unprocessable entity
+          //}
+        }
+      })
+    })
+  },
   retrieve_data_by_id: function (mongoClient, dbURL, dbName, dbCollection, uuid) {
     return new Promise(function (resolve, reject) {
       mongoClient.connect(dbURL, { useNewUrlParser: true }, function (err, client) {
