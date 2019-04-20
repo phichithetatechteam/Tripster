@@ -95,7 +95,7 @@ export class Trips extends React.Component {
               <nav className="navbar" role="navigation" aria-label="main navigation">
                 <div className="navbar-brand">
                   <a className="navbar-item">
-                    <img src="../images/tripster.png" width="112" height="28"/>
+                      <img src="https://github.com/lrisTech/Tripster/blob/master/tripster-react/src/images/tripster.png?raw=true"/>
                   </a>
                 </div>
                 <div className="navbar-menu">
@@ -117,6 +117,9 @@ export class Trips extends React.Component {
 
               <div className="trips-container">
                 {this.renderTrips()}
+
+                  <iframe src="https://open.spotify.com/embed/track/6u7jPi22kF8CTQ3rb9DHE7" width="300" height="380"
+                          frameBorder="0" allowTransparency="true" allow="encrypted-media"></iframe>
               </div>
 
             </div>

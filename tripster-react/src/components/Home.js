@@ -48,7 +48,7 @@ export class Home extends React.Component {
                     <nav className="navbar" role="navigation" aria-label="main navigation">
                         <div className="navbar-brand">
                             <a className="navbar-item">
-                                <img src="../images/tripster.png"/>
+                                <img src="https://github.com/lrisTech/Tripster/blob/master/tripster-react/src/images/tripster.png?raw=true"/>
 
                             </a>
                         </div>
