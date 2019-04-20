@@ -12,7 +12,7 @@ var clientsecret = '96b5123b508a42f4b450b9b600341ab6'
 
 const dbFunctions = require('./functions/db_functions')
 const databaseConnection = JSON.parse(fs.readFileSync('./mongo_settings.json', 'utf8'))
-const url = 'mongodb://localhost:27017/tripster_users' //db currently on localhost
+const url = "mongodb+srv://pctzetatechteam:chiragiscool@tripster-602op.gcp.mongodb.net/test?retryWrites=true"; //connection path to gcp mongo instance
 // constants
 const app = express()
 app.use(cors())
@@ -29,7 +29,7 @@ app.get('/status', function (req, res) {
 // Retrieves username, first name, last name, age if the user exists in the data source.
 //test for mongo server
 app.get('/testdb', function(req,res){
-    const response = dbFunctions.retrieve_data_by_id(mongoClient, url, 'tripster_users', 'users') //temporary location of local db
+    const response = dbFunctions.retrieve_data_by_id(mongoClient, url, 'Tripster', 'accounts') //temporary location of local db
     console.log("RESPONSE", response)
     response.then(function (resp) {
         console.log(resp)
@@ -39,10 +39,10 @@ app.get('/testdb', function(req,res){
     })
     //console.log(response.collection.find())
 })
-app.post('/checkuser', function(req, res){
-    const response = dbFunctions.post_new_profile_entity(mongoClient, url, 'tripster_users', 'users', req.query.username, req.query.pw);
-    console.log(req.query.username);
-    console.log(req.query.pw);
+app.post('/authenticate', function(req, res){
+    const response = dbFunctions.post_new_profile_entity(mongoClient, url, 'Tripster', 'accounts', req.query.name, req.query.email, req.query.picture, req.query.user_id);
+    console.log(req.query.name);
+
     response.then(function(resp){
         res.status(resp.status)
         res.send(resp.message)
