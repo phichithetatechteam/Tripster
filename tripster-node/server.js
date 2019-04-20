@@ -31,28 +31,32 @@ app.get('/status', function (req, res) {
 //test for mongo server
 app.get('/testdb', function(req,res){
     const response = dbFunctions.retrieve_data_by_id(mongoClient, url, 'Tripster', 'accounts') //temporary location of local db
-    console.log("RESPONSE", response)
     response.then(function (resp) {
-        console.log(resp)
         res.send(resp.message)
     }).catch(function (error) {
         res.send(error)
     })
-    //console.log(response.collection.find())
 })
 app.post('/save-trip', function(req, res){
-    const response = dbFunctions.post_trip_data(mongoClient, url, 'Tripster', 'trips', req.body);
-
-    response.then(function(resp){
-        res.status(resp.status)
-        res.send(resp.message)
-    }).catch(function (error){
-        res.send(error)
-    })
+    if (!req.body._id){
+        const response = dbFunctions.insert_trip_data(mongoClient, url, 'Tripster', 'trips', req.body);
+        response.then(function(resp){
+            res.send(resp.data.insertedId)
+        })
+    } else { //id does exsist from front-end
+        //update to trips only if the id and email exists
+        res.send("UPDATE TO TRIPS ONLY IF THE ID AND EMAIL EXISTS ")
+    }
+    // const response = dbFunctions.post_trip_data(mongoClient, url, 'Tripster', 'trips', req.body);
+    // response.then(function(resp){
+    //     res.status(resp.status)
+    //     res.send(resp.message)
+    // }).catch(function (error){
+    //     res.send(error)
+    // })
 })
 app.post('/authenticate', function(req, res){
     const response = dbFunctions.post_new_profile_entity(mongoClient, url, 'Tripster', 'accounts', req.body.name, req.body.email, req.body.picture, req.body.user_id);
-    console.log(req.body.name);
 
     response.then(function(resp){
         res.status(resp.status)
@@ -97,7 +101,6 @@ app.get('/calculate-distance', function (req, res) {
 
 
         let obj = JSON.parse(body)
-        console.log(obj)
         obj = obj['businesses']
 
         let results = {'stops': []}
@@ -109,7 +112,6 @@ app.get('/calculate-distance', function (req, res) {
             let dict = {'name':currObj['name'], 'image_url':currObj['image_url'], 'coordinates':currObj['coordinates'], 'rating':currObj['rating'], 'url':currObj['url'], 'review_count':currObj['review_count'], 'phone':currObj['phone']}
             results['stops'].push(dict)
         }
-      //console.log(results);
         res.send(results);
 
 
@@ -146,7 +148,6 @@ app.get('/spotifunk', function(req, res){
 
 app.get('/callback', function(req, res){
     var code = req.query.code || null
-    console.log(code);
 
     var authOptions = {
         url: 'https://accounts.spotify.com/api/token',
@@ -167,7 +168,6 @@ app.get('/callback', function(req, res){
         } else {
             refresh_token = "invalid refresh token";
         }
-        console.log(body);
         res.redirect(`${'http://localhost:3000/plan-trip'}?refresh_token=${refresh_token}`)
     });
 });

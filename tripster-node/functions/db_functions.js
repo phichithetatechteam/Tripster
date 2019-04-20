@@ -46,6 +46,20 @@ module.exports = {
       })
     })
   },
+    insert_trip_data: function (mongoClient, dbURL, dbName, dbCollection,body) {
+        return new Promise(function (resolve, reject) {
+            mongoClient.connect(dbURL, { useNewUrlParser: true }, function (err, client) {
+                if (isMongoConnected(err)) {
+                    const db = client.db(dbName)
+                    const collection = db.collection(dbCollection)
+                    collection.insertOne(body).then(resp => {
+                        resolve({ 'status': 200, 'data': resp })
+                    })
+
+                }
+            })
+        })
+    },
   post_trip_data: function (mongoClient, dbURL, dbName, dbCollection,body) {
     return new Promise(function (resolve, reject) {
       mongoClient.connect(dbURL, { useNewUrlParser: true }, function (err, client) {
