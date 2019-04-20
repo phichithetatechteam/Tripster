@@ -87,7 +87,13 @@ export class Home extends React.Component {
                             Tripster is a web-application that allows you to find fun places during your road trip. We use Yelp's API to give you the best possible options to visit.
                         </p>
                         <a>
-                            {fbContent}
+                            <FacebookLogin
+                              appId="242487039919018"
+                              autoLoad={false}
+                              fields="name,email,picture"
+                              callback={response => this.responseFacebook(response)}
+                              onFailure={() => this.props.history.push("/")}
+                            />
                         </a>
                     </div>
 
