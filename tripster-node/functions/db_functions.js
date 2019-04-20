@@ -13,7 +13,7 @@ function isMongoConnected (err) {
 }
 
 module.exports = {
-  post_new_profile_entity: function (mongoClient, dbURL, dbName, dbCollection, userName, pw) {
+  post_new_profile_entity: function (mongoClient, dbURL, dbName, dbCollection, name, email, picture, user_id) {
     return new Promise(function (resolve, reject) {
       mongoClient.connect(dbURL, { useNewUrlParser: true }, function (err, client) {
         if (isMongoConnected(err)) {
@@ -26,16 +26,17 @@ module.exports = {
 
           // Validates Inputs
           //if (validation.isValidUserName(userName) && validation.isValidFirstOrLastName(firstName) && validAge(age)) {
-            collection.findOne({ userName }, function (collectionError, document) {
+            collection.findOne({user_id}, function (collectionError, document) {
               if (collectionError) {
                 reject(collectionError)
               }
               // if username not in collection - insert
               if (document === null) {
-                collection.insertOne({ userName, pw})
-                resolve({ 'status': 200, 'message': { userName, pw } }) // ok
-              } else { // username already in collection - do not insert
-                resolve({ 'status': 409, 'message': 'Username already in collection' }) // conflict
+                collection.insertOne({name, user_id, email, picture})
+                resolve({ 'status': 200, 'message': {name, user_id, email, picture} }) // ok
+              } else { // username already in collection -
+                collection.updateOne({user_id}, {$set:{'name': name,'email': email, 'picture':picture}} )
+                resolve({ 'status': 409, 'message': 'updated value' }) // conflict
               }
             })
           //} else { // Invalid Input
