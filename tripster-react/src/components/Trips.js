@@ -7,6 +7,9 @@ import cookie from 'react-cookies'
 
 
 export class Trips extends React.Component {
+    createNewTrip(){
+        this.props.history.push("/plan-trip")
+    }
     renderTrips(){
         let trips = []
         const obj = {"name": "Chicago Adventure", "date": "Feb 3"}
@@ -18,16 +21,17 @@ export class Trips extends React.Component {
                 <Card
                     type="inner"
                     style={{
-                        backgroundColor: '#d4ecdc',
-                        width: '300px',
+                        backgroundColor: '#CDC29E',
+                        width: '323.5px',
+                        height: '130px',
                         textAlign: 'center',
                         margin: '0px',
                         borderRadius: '10px',
                     }}
                 >
-                    <p className="trip-name">{trip.name}</p>
-                    <p className="trip-content">{trip.date}</p>
-                    <Button>View Trip</Button>
+                    <p className="trip-name is-family-primary">{trip.name}</p>
+                    <p className="trip-content is-family-secondary">{trip.date}</p>
+                    <Button className="is-family-primary">View Trip</Button>
                 </Card>
             </div>
         ));
@@ -37,7 +41,7 @@ export class Trips extends React.Component {
                     type="inner"
                     bordered={true}
                     style={{
-                        backgroundColor: 'blue',
+                        backgroundColor: '#add8e6',
                         width: '300px',
                         textAlign: 'center',
                         margin: '0px',
@@ -45,8 +49,9 @@ export class Trips extends React.Component {
                         borderStyle: 'dashed !important'
                     }}
                 >
-                    <p className="trip-name">+</p>
-                    <Button>Create a New Trip</Button>
+                    <p className="trip-name has-text-weight-bold has-text-white-bis is-size-4">+</p>
+                    <h1> </h1>
+                    <Button onClick={() => this.createNewTrip()}>Create a New Trip</Button>
                 </Card>
             </div>
         )
@@ -78,24 +83,48 @@ export class Trips extends React.Component {
                     <p>Email: {cookie.load("email")}</p>
                 </Menu.Item>
                 <Menu.Item>
-                    <a onClick={() => this.logout()}>Logout</a>
+                    <Button onClick={() => this.logout()}>Logout</Button>
                 </Menu.Item>
             </Menu>
         );
         return (
-            <div>
-                <div >
+          <section className="hero is-light is-fullheight">
+
+            <div className="hero-head">
+
+              <nav className="navbar" role="navigation" aria-label="main navigation">
+                <div className="navbar-brand">
+                  <a className="navbar-item">
+                      <img src="https://github.com/lrisTech/Tripster/blob/master/tripster-react/src/images/tripster.png?raw=true"/>
+                  </a>
+                </div>
+                <div className="navbar-menu">
+
+                </div>
+                <div className="navbar-end">
+                  <a className="navbar-item">
                     <Dropdown overlay={menu} >
-                        <img src={cookie.load("picture")} />
+                        <img src={cookie.load("picture")} alt=""/>
                     </Dropdown>
+                  </a>
                 </div>
 
-                <h1>Your Trips!</h1>
-                <div className="trips-container">
-                    {this.renderTrips()}
-                </div>
+              </nav>
 
             </div>
+
+            <div class="hero-body">
+
+              <div className="trips-container">
+                {this.renderTrips()}
+
+                  <iframe src="https://open.spotify.com/embed/track/6u7jPi22kF8CTQ3rb9DHE7" width="300" height="380"
+                          frameBorder="0" allowTransparency="true" allow="encrypted-media"></iframe>
+              </div>
+
+            </div>
+
+          </section>
 
         );
     }

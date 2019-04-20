@@ -1,23 +1,29 @@
 import React from "react";
 import FacebookLogin from 'react-facebook-login';
-import {Button, Card} from "antd";
 import { withRouter } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
 import cookie from 'react-cookies'
 
 export class Home extends React.Component {
 
-    state = {
-        isLoggedIn: false,
-        userID: '',
-        name: '',
-        email: '',
-        picture: ''
+    constructor(props){
+        super(props)
+        this.state = {
+            isLoggedIn: false,
+            userID: '',
+            name: '',
+            email: '',
+            picture: ''
+        }
     }
 
-    responseFacebook = response => {
-        console.log(response);
 
+
+    responseFacebook(response) {
+        cookie.save('isLoggedIn', true)
+        cookie.save('userID', response.userID)
+        cookie.save('name', response.name)
+        cookie.save('email', response.email)
+        cookie.save('picture', response.picture.data.url)
         this.setState({
             isLoggedIn: true,
             userID: response.userID,
@@ -25,42 +31,83 @@ export class Home extends React.Component {
             email: response.email,
             picture: response.picture.data.url
         });
+        this.props.history.push('/trips');
     }
 
-    componentClicked = () => console.log("clicked");
-
-    render() {
-
-        let fbContent;
-
-        if (this.state.isLoggedIn) {
-            // return <Redirect to='/trips' />
-            cookie.save('isLoggedIn', this.state.isLoggedIn)
-            cookie.save('userID', this.state.userID)
-            cookie.save('name', this.state.name)
-            cookie.save('email', this.state.email)
-            cookie.save('picture', this.state.picture)
+    componentDidMount(){
+        if(cookie.load('isLoggedIn')){
             this.props.history.push('/trips');
         }
+    }
 
-        else {
-            fbContent = (<FacebookLogin
-                appId="242487039919018"
-                autoLoad={true}
-                fields="name,email,picture"
-                onClick={this.componentClicked}
-                callback={this.responseFacebook}
-                onFailure={() => this.props.history.push("/")}
-                />);
-        }
-
+    render() {
         return (
-            <div>
-                <h1>Welcome to Tripster</h1>
-                {fbContent}
+            <section class="hero is-fullheight">
+                <div class="hero-head">
 
-            </div>
+                    <nav className="navbar" role="navigation" aria-label="main navigation">
+                        <div className="navbar-brand">
+                            <a className="navbar-item">
+                                <img src="https://github.com/lrisTech/Tripster/blob/master/tripster-react/src/images/tripster.png?raw=true"/>
 
+                            </a>
+                        </div>
+                        <div className="navbar-menu">
+
+                        </div>
+                        <div className="navbar-end">
+                            <div className="navbar-item">
+                                <div className="buttons">
+                                    <a className="button is-link">
+                                        <strong>Sign up</strong>
+                                    </a>
+                                    <a className="button is-light">
+                                        Log in
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </nav>
+
+                </div>
+
+
+
+                <div class="hero-body">
+
+                    <div className="column is-6 is-offset-1 has-text-left">
+                        <h1 className="title has-text-weight-bold">
+                            Welcome to Tripster
+                        </h1>
+                        <p>
+
+                        </p>
+                        <p class="subtitle is-5">
+                            Tripster is a web-application that allows you to find fun places during your road trip. We use Yelp's API to give you the best possible options to visit.
+                        </p>
+                        <a>
+                            <FacebookLogin
+                              appId="242487039919018"
+                              autoLoad={false}
+                              fields="name,email,picture"
+                              callback={response => this.responseFacebook(response)}
+                              onFailure={() => this.props.history.push("/")}
+                            />
+                        </a>
+                    </div>
+
+                    <div class="column is-4">
+                        <h1 class="has-text-centered">
+                            <img src="https://images-na.ssl-images-amazon.com/images/I/61m0oPPL%2BKL._SX466_.jpg"/>
+                        </h1>
+                    </div>
+
+
+                </div>
+
+
+            </section>
         );
     }
 }

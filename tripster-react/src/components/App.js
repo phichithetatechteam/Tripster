@@ -1,17 +1,34 @@
-import {Map, Marker, GoogleApiWrapper, Polyline} from 'google-maps-react';
+import {Map, Marker, GoogleApiWrapper, Polyline, InfoWindow} from 'google-maps-react';
 import React from 'react'
 import PlacesAutocomplete from 'react-places-autocomplete';
 import 'antd/dist/antd.css';
-import { Input, Button, Radio, Card, Checkbox, Select } from 'antd';
+import { Input, Button, Radio, Card, Checkbox, Select, Calendar, Popover, Icon} from 'antd';
 import { withRouter } from 'react-router-dom';
 import {geocodeByAddress, getLatLng} from 'react-places-autocomplete';
 import '../stylesheets/App.css'
 import './Spotifunk'
 import request from 'request'
 import Spotifunk from "./Spotifunk";
+import Steps from "./Steps";
+import cookie from "react-cookies";
 
 const CheckboxGroup = Checkbox.Group;
 const Option = Select.Option;
+const tripster_stops_1 = [
+    { label: 'Active Life', value: 'Active Life'},
+    { label: 'Entertainment', value: 'Arts & Entertainment' },
+];
+const tripster_stops_2 = [
+    { label: 'Nightlife', value: 'Nightlife' },
+    { label: 'Restaurants', value: 'Restaurants' },
+];
+function isEmpty(obj) {
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}
 
 export class MapContainer extends React.Component {
     constructor(props) {
@@ -25,7 +42,9 @@ export class MapContainer extends React.Component {
             addition_markers: undefined,
             sort_by: 'best_match',
             price: 1,
-            waypoints: []
+            waypoints: [],
+            waypoints_db_obj: [],
+            driving_result: {}
         };
     }
     handleChangeOrigin = origin_address => {
@@ -57,6 +76,9 @@ export class MapContainer extends React.Component {
     };
 
     calculate_distance() {
+        if (isEmpty(this.state.origin_obj) || isEmpty(this.state.destination_obj)){
+            return
+        }
         const DirectionsService = new this.props.google.maps.DirectionsService();
         DirectionsService.route({
             origin: this.state.origin_address,
@@ -65,7 +87,7 @@ export class MapContainer extends React.Component {
             optimizeWaypoints: true,
             travelMode: this.props.google.maps.TravelMode.DRIVING,
         }, (result, status) => {
-            console.log("RESULT", result.routes[0])
+
             var bounds = new this.props.google.maps.LatLngBounds();
             try{
                 const all_steps = (result.routes[0].overview_path)
@@ -73,7 +95,7 @@ export class MapContainer extends React.Component {
                     let current_step_json = all_steps[step].toJSON()
                     bounds.extend(current_step_json);
                 }
-                this.setState({'steps': result.routes[0].overview_path, bounds})
+                this.setState({'steps': result.routes[0].overview_path, bounds, driving_result: result})
             } catch (e){
                 console.log("ERR")
             }
@@ -94,7 +116,6 @@ export class MapContainer extends React.Component {
             headers:
                 { 'Postman-Token': '172aa67b-54c6-4116-9000-9a22e9480045',
                     'cache-control': 'no-cache' } };
-        console.log("SENDING REQUEST")
         request(options, function (error, response, body) {
             if (error) throw new Error(error);
 
@@ -103,6 +124,8 @@ export class MapContainer extends React.Component {
 
             const additional_markers = json_stops.map((stop) =>
                 <Marker
+                    onMouseover={(props, marker, e) => this.displayInfoWindow(props, marker, e)}
+                    stop={stop}
                     key={stop.image_url}
                     position={{lat: stop.coordinates.latitude, lng: stop.coordinates.longitude}}
                     onClick={() => this.setWayPoint(stop.coordinates.latitude, stop.coordinates.longitude)}
@@ -113,30 +136,80 @@ export class MapContainer extends React.Component {
         }.bind(this));
     }
 
+    displayInfoWindow(props, marker, e) {
+        const infoWindow = (
+            <InfoWindow
+                marker={marker}
+                visible={true} >
+                <div>
+                    <h3><a href={props.stop.url}>{props.stop.name}</a></h3>
+                    <img src={props.stop.image_url} alt="" height="20%" width="20%" />
+                    <p>Rating: {props.stop.rating}/5.0</p>
+                    <p>{props.stop.phone}</p>
+
+                    <Icon type="delete" theme="twoTone" twoToneColor="#eb2f96" onClick={() => console.log("DELETE STOP")}/>
+                </div>
+            </InfoWindow>
+        )
+        this.setState({infoWindow})
+    }
 
     setWayPoint(lat, lng){
         this.setState({waypoints:[...this.state.waypoints, {
                 location: new this.props.google.maps.LatLng(lat,lng),
                 stopover: true
+            }], waypoints_db_obj:[...this.state.waypoints_db_obj, {
+                lat,
+                lng
             }]});
         this.calculate_distance()
     }
 
+    saveTrip(){
+        const trip = {
+            name: this.state.trip_name,
+            date: this.state.trip_date,
+            email: cookie.load("email"),
+            origin: {
+                address: this.state.origin_address,
+                lat: this.state.origin_obj.lat,
+                lng: this.state.origin_obj.lng,
+            },
+            destination: {
+                address: this.state.destination_address,
+                lat: this.state.destination_obj.lat,
+                lng: this.state.destination_obj.lng,
+            },
+            activities: {
+                stops: this.state.stops,
+                sort_by: this.state.sort_by,
+                price: this.state.price,
+                waypoints: this.state.waypoints_db_obj
+            }
+        }
+        console.log(trip)
+    }
+
     render() {
-        const tripster_stops = [
-            { label: 'Active Life', value: 'Active Life' },
-            { label: 'Arts & Entertainment', value: 'Arts & Entertainment' },
-            { label: 'Nightlife', value: 'Nightlife' },
-            { label: 'Restaurants', value: 'Restaurants' },
-            { label: 'Hotels & Travel', value: 'Hotels & Travel' },
-        ];
+
+        const content = (
+            <div style={{ width: 300, border: '1px solid #d9d9d9', borderRadius: 4 }}>
+                <Calendar fullscreen={false} onChange={(date) => this.setState({trip_date: date._d.toISOString()})} />
+            </div>
+        )
         return (
-            <div class="flex-container">
+            <div>
+                <Input style={{"width": "90%", "borderRight": "10px"}} placeholder={"Enter a name of your trip"} onChange={(event) => this.setState({trip_name: event.target.value})}/>
+                <Popover content={content} title="Travel Date" trigger="click">
+                    <Icon type="calendar" />
+                </Popover>
+            <div className="flex-container">
 
-                <div class="flex-container-div-left">
+
+                <div className="flex-container-div-left">
 
 
-                    <Card
+                    <Card class="is-size-1"
                         title="Tripster Stops"
                     >
                         <PlacesAutocomplete
@@ -216,20 +289,28 @@ export class MapContainer extends React.Component {
                                 </div>
                             )}
                         </PlacesAutocomplete>
-                        <CheckboxGroup
-                            options={tripster_stops}
-                            onChange={stops => this.setState({stops})}
-                        />
-                        <a className={"sort-by"}>Sort By: </a>
+                        <br />
 
+                        <div>
+                            <CheckboxGroup
+                                options={tripster_stops_1}
+                                onChange={stops => this.setState({stops})}
+                            />
+                            <br/><br/>
+                            <CheckboxGroup
+                                options={tripster_stops_2}
+                                onChange={stops => this.setState({stops})}
+                            />
+                        </div>
+                        <br/>
+                        <p className={"sort-by"}>Sort By: </p>
                         <Select defaultValue={"best_match"} style={{width: 150}} max={51} onChange={(sort_by) => this.setState({sort_by})}>
-                            <Option value="best_match">Best Match</Option>
+                            <Option value="best_match" >Best Match</Option>
                             <Option value="rating">Rating</Option>
                             <Option value="review_count">Review Count</Option>
                             <Option value="distance">Distance</Option>
                         </Select>
-
-                        <br/>
+                        <br/><br/>
 
                         <Radio.Group defaultValue="1" buttonStyle="solid" onChange={price => this.setState({price: price.target.value})}>
                             <Radio.Button value="1">$</Radio.Button>
@@ -238,21 +319,15 @@ export class MapContainer extends React.Component {
                             <Radio.Button value="4">$$$</Radio.Button>
                         </Radio.Group>
 
-                        <Button
-                            type="primary"
-                            onClick={() => this.calculate_distance()}
-                            className={"calculate-button"}
-                        >
-                            Calculate
-                        </Button>
+                        <Button onClick={() => this.calculate_distance()}>Calculate</Button>
 
                     </Card>
                     <Spotifunk/>
                 </div>
 
-                <div class="flex-container-div-right">
+                <div className="flex-container-div-right">
 
-                    <Map className="googlemaps" google={this.props.google} zoom={5} bounds={this.state.bounds} center={{lat: this.state.origin_obj.lat, lng: this.state.origin_obj.lng}}>
+                    <Map className="googlemaps" google={this.props.google} zoom={5} bounds={this.state.bounds}>
                         <Marker
                             position={{lat: this.state.origin_obj.lat, lng: this.state.origin_obj.lng}} />
                         <Marker
@@ -265,9 +340,16 @@ export class MapContainer extends React.Component {
                             strokeOpacity={4}
                             strokeWeight={10}
                         />
+                        {this.state.infoWindow}
+
                     </Map>
+                    <Steps driving_result={this.state.driving_result}/>
 
                 </div>
+
+
+            </div>
+                <Button onClick={() => this.saveTrip()} className={"save-trip-button"}>Save Trip</Button>
             </div>
 
         );

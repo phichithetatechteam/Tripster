@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Card} from "antd";
+import {Button} from "antd";
 import querystring from "querystring";
 import {withRouter} from 'react-router-dom';
 import request from 'request';

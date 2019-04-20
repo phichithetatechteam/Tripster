@@ -1,0 +1,14 @@
+.stop-div{
+    display: flex;
+    flex-grow: 1;
+    margin-bottom: 10px;
+}
+
+.stop-item-right {
+    flex-grow: 8;
+}
+
+.steps-card{
+    overflow-y: auto;
+    max-height: 500px;
+}

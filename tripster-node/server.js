@@ -7,16 +7,17 @@ var request = require("request");
 
 var clientid = '682367fe3a8a41a0b81f34dc5c6fe936'
 var clientsecret = '96b5123b508a42f4b450b9b600341ab6'
-
+var bodyParser = require('body-parser');
 
 
 const dbFunctions = require('./functions/db_functions')
 const databaseConnection = JSON.parse(fs.readFileSync('./mongo_settings.json', 'utf8'))
-const url = 'mongodb://localhost:27017/tripster_users' //db currently on localhost
+const url = "mongodb+srv://pctzetatechteam:chiragiscool@tripster-602op.gcp.mongodb.net/test?retryWrites=true"; //connection path to gcp mongo instance
 // constants
 const app = express()
 app.use(cors())
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
 
 // start express server
 const server = app.listen(8888, () => console.log('Listening on Port 8888'))
@@ -29,20 +30,34 @@ app.get('/status', function (req, res) {
 // Retrieves username, first name, last name, age if the user exists in the data source.
 //test for mongo server
 app.get('/testdb', function(req,res){
-    const response = dbFunctions.retrieve_data_by_id(mongoClient, url, 'tripster_users', 'users') //temporary location of local db
-    console.log("RESPONSE", response)
+    const response = dbFunctions.retrieve_data_by_id(mongoClient, url, 'Tripster', 'accounts') //temporary location of local db
     response.then(function (resp) {
-        console.log(resp)
         res.send(resp.message)
     }).catch(function (error) {
         res.send(error)
     })
-    //console.log(response.collection.find())
 })
-app.post('/checkuser', function(req, res){
-    const response = dbFunctions.post_new_profile_entity(mongoClient, url, 'tripster_users', 'users', req.query.username, req.query.pw);
-    console.log(req.query.username);
-    console.log(req.query.pw);
+app.post('/save-trip', function(req, res){
+    if (!req.body._id){
+        const response = dbFunctions.insert_trip_data(mongoClient, url, 'Tripster', 'trips', req.body);
+        response.then(function(resp){
+            res.send(resp.data.insertedId)
+        })
+    } else { //id does exsist from front-end
+        //update to trips only if the id and email exists
+        res.send("UPDATE TO TRIPS ONLY IF THE ID AND EMAIL EXISTS ")
+    }
+    // const response = dbFunctions.post_trip_data(mongoClient, url, 'Tripster', 'trips', req.body);
+    // response.then(function(resp){
+    //     res.status(resp.status)
+    //     res.send(resp.message)
+    // }).catch(function (error){
+    //     res.send(error)
+    // })
+})
+app.post('/authenticate', function(req, res){
+    const response = dbFunctions.post_new_profile_entity(mongoClient, url, 'Tripster', 'accounts', req.body.name, req.body.email, req.body.picture, req.body.user_id);
+
     response.then(function(resp){
         res.status(resp.status)
         res.send(resp.message)
@@ -97,7 +112,6 @@ app.get('/calculate-distance', function (req, res) {
             let dict = {'name':currObj['name'], 'image_url':currObj['image_url'], 'coordinates':currObj['coordinates'], 'rating':currObj['rating'], 'url':currObj['url'], 'review_count':currObj['review_count'], 'phone':currObj['phone']}
             results['stops'].push(dict)
         }
-      //console.log(results);
         res.send(results);
 
 
@@ -134,7 +148,6 @@ app.get('/spotifunk', function(req, res){
 
 app.get('/callback', function(req, res){
     var code = req.query.code || null
-    console.log(code);
 
     var authOptions = {
         url: 'https://accounts.spotify.com/api/token',
@@ -155,7 +168,6 @@ app.get('/callback', function(req, res){
         } else {
             refresh_token = "invalid refresh token";
         }
-        console.log(body);
         res.redirect(`${'http://localhost:3000/plan-trip'}?refresh_token=${refresh_token}`)
     });
 });
