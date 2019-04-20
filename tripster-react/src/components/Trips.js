@@ -41,9 +41,8 @@ export class Trips extends React.Component {
                     type="inner"
                     bordered={true}
                     style={{
-                        backgroundColor: '#7B715B',
-                        width: '323.5px',
-                        height: '130px',
+                        backgroundColor: '#add8e6',
+                        width: '300px',
                         textAlign: 'center',
                         margin: '0px',
                         borderRadius: '10px',
@@ -84,7 +83,7 @@ export class Trips extends React.Component {
                     <p>Email: {cookie.load("email")}</p>
                 </Menu.Item>
                 <Menu.Item>
-                    <a onClick={() => this.logout()}>Logout</a>
+                    <Button onClick={() => this.logout()}>Logout</Button>
                 </Menu.Item>
             </Menu>
         );
@@ -105,7 +104,7 @@ export class Trips extends React.Component {
                 <div className="navbar-end">
                   <a className="navbar-item">
                     <Dropdown overlay={menu} >
-                      <img src={cookie.load("picture")} />
+                        <img src={cookie.load("picture")} alt=""/>
                     </Dropdown>
                   </a>
                 </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Card} from "antd";
+import {Button} from "antd";
 import querystring from "querystring";
 
 export class Spotifunk extends React.Component {
@@ -30,10 +30,7 @@ export class Spotifunk extends React.Component {
     render() {
         return (
             <div>
-                <Card>
-                    <Button type="primary" onClick={() => this.login()}>Spotifunk</Button>
-                </Card>
-
+                <Button onClick={() => this.login()}>Spotifunk</Button>
             </div>
         );
     }

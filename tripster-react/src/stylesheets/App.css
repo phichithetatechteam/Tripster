@@ -1,8 +1,7 @@
 .location-search-input {
-  width: 75%;
+  width: 100%;
   margin-top: 2%;
   background-color: white;
-  padding-left: 40px;
   background-position: 10px 10px;
 }
 
@@ -46,6 +45,7 @@ html {
   flex-grow: 2;
 }
 .flex-container-div-right{
+
   width: 100px;
   margin: 10px;
   text-align: center;
@@ -53,9 +53,11 @@ html {
   font-size: 10px;
   flex-grow: 8;
   flex-wrap: wrap;
+    position: relative;
 }
 
 .flex-container-div-right-up{
+    position: absolute;
    width: 100px;
    margin: 10px;
    text-align: center;
@@ -78,5 +80,9 @@ html {
 }
 .sort-by:hover{
     color: #000;
+}
+
+.save-trip-button{
+    width: 100%;
 }
 
