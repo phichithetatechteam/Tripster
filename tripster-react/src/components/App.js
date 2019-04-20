@@ -209,7 +209,7 @@ export class MapContainer extends React.Component {
                 <div className="flex-container-div-left">
 
 
-                    <Card
+                    <Card class="is-size-1"
                         title="Tripster Stops"
                     >
                         <PlacesAutocomplete
@@ -310,7 +310,6 @@ export class MapContainer extends React.Component {
                             <Option value="review_count">Review Count</Option>
                             <Option value="distance">Distance</Option>
                         </Select>
-
                         <br/><br/>
 
                         <Radio.Group defaultValue="1" buttonStyle="solid" onChange={price => this.setState({price: price.target.value})}>

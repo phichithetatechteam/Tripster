@@ -21,16 +21,17 @@ export class Trips extends React.Component {
                 <Card
                     type="inner"
                     style={{
-                        backgroundColor: '#d4ecdc',
-                        width: '300px',
+                        backgroundColor: '#CDC29E',
+                        width: '323.5px',
+                        height: '130px',
                         textAlign: 'center',
                         margin: '0px',
                         borderRadius: '10px',
                     }}
                 >
-                    <p className="trip-name">{trip.name}</p>
-                    <p className="trip-content">{trip.date}</p>
-                    <Button>View Trip</Button>
+                    <p className="trip-name is-family-primary">{trip.name}</p>
+                    <p className="trip-content is-family-secondary">{trip.date}</p>
+                    <Button className="is-family-primary">View Trip</Button>
                 </Card>
             </div>
         ));
@@ -48,7 +49,8 @@ export class Trips extends React.Component {
                         borderStyle: 'dashed !important'
                     }}
                 >
-                    <p className="trip-name">+</p>
+                    <p className="trip-name has-text-weight-bold has-text-white-bis is-size-4">+</p>
+                    <h1> </h1>
                     <Button onClick={() => this.createNewTrip()}>Create a New Trip</Button>
                 </Card>
             </div>
@@ -86,19 +88,40 @@ export class Trips extends React.Component {
             </Menu>
         );
         return (
-            <div>
-                <div >
+          <section className="hero is-light is-fullheight">
+
+            <div className="hero-head">
+
+              <nav className="navbar" role="navigation" aria-label="main navigation">
+                <div className="navbar-brand">
+                  <a className="navbar-item">
+                    <img src="../images/tripster.png" width="112" height="28"/>
+                  </a>
+                </div>
+                <div className="navbar-menu">
+
+                </div>
+                <div className="navbar-end">
+                  <a className="navbar-item">
                     <Dropdown overlay={menu} >
                         <img src={cookie.load("picture")} alt=""/>
                     </Dropdown>
+                  </a>
                 </div>
 
-                <h1>Your Trips!</h1>
-                <div className="trips-container">
-                    {this.renderTrips()}
-                </div>
+              </nav>
 
             </div>
+
+            <div class="hero-body">
+
+              <div className="trips-container">
+                {this.renderTrips()}
+              </div>
+
+            </div>
+
+          </section>
 
         );
     }
