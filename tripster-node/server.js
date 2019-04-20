@@ -40,6 +40,16 @@ app.get('/testdb', function(req,res){
     })
     //console.log(response.collection.find())
 })
+app.post('/save-trip', function(req, res){
+    const response = dbFunctions.post_trip_data(mongoClient, url, 'Tripster', 'trips', req.body);
+
+    response.then(function(resp){
+        res.status(resp.status)
+        res.send(resp.message)
+    }).catch(function (error){
+        res.send(error)
+    })
+})
 app.post('/authenticate', function(req, res){
     const response = dbFunctions.post_new_profile_entity(mongoClient, url, 'Tripster', 'accounts', req.body.name, req.body.email, req.body.picture, req.body.user_id);
     console.log(req.body.name);
