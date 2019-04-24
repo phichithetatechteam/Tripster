@@ -30,7 +30,7 @@ html {
 
 .googlemaps {
   height: 100% !important;
-  width: 100% !important;
+  width: 99% !important;
 }
 
 .flex-container {
@@ -71,9 +71,6 @@ html {
   align-content: flex-end;
 }
 
-.calculate-button{
-    width: 100%;
-}
 .sort-by{
     color: #000;
     cursor: default;
@@ -86,3 +83,26 @@ html {
     width: 100%;
 }
 
+.ant-input {
+    margin-top: 15px !important;
+    margin-bottom: 5px;
+}
+
+.ant-card-bordered {
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+.ant-card-body {
+    margin-left:0px !important;
+}
+
+.bottom-button {
+    height: 50px;
+    width: 25%;
+}
+
+.spotifunk-button {
+    height: 50px;
+    width: 25%;
+}

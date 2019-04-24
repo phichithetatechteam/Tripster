@@ -30,7 +30,7 @@ export class Spotifunk extends React.Component {
     render() {
         return (
             <div>
-                <Button onClick={() => this.login()}>Spotifunk</Button>
+                <Button class="spotifunk-button" onClick={() => this.login()}>Spotifunk</Button>
             </div>
         );
     }

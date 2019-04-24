@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8f68420e-6287-45ee-a305-7f99ac9a4f80" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tripster-react/src/components/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tripster-react/src/components/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tripster-react/src/components/Spotifunk.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tripster-react/src/components/Spotifunk.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../tripster-react/src/components/Trips.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tripster-react/src/components/Trips.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tripster-react/src/stylesheets/trips.css" beforeDir="false" afterPath="$PROJECT_DIR$/../tripster-react/src/stylesheets/trips.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tripster-react/src/stylesheets/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/../tripster-react/src/stylesheets/App.css" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />

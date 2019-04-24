@@ -17,7 +17,6 @@ export class Trips extends React.Component {
         trips.push(obj)
         trips.push(obj)
         trips.push(obj)
-        trips.push(obj)
         const renderTrips = trips.map(trip => (
             <div className="trip-item">
               <div className="card">
