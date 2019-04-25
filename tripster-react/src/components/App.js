@@ -11,6 +11,7 @@ import request from 'request'
 import Spotifunk from "./Spotifunk";
 import Steps from "./Steps";
 import cookie from "react-cookies";
+import moment from 'moment'
 
 const CheckboxGroup = Checkbox.Group;
 const Option = Select.Option;
@@ -34,6 +35,7 @@ export class MapContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            trip_name: '',
             origin_address: '',
             destination_address: '',
             origin_obj: {},
@@ -41,12 +43,66 @@ export class MapContainer extends React.Component {
             stops: [],
             addition_markers: undefined,
             sort_by: 'best_match',
-            price: 1,
+            price: "1",
             waypoints: [],
             waypoints_db_obj: [],
-            driving_result: {}
+            driving_result: {},
+            trip_id: '',
+            trip_date: undefined,
+
         };
     }
+    componentDidMount(){
+        const trip_id = this.props.history.location.pathname.split("/")[2]
+        var options = {
+            method: 'GET',
+            url: 'http://localhost:8888/view-trip',
+            qs: {
+                email: cookie.load('email'),
+                user_id: cookie.load('userID'),
+                trip_id: trip_id
+            },
+            json: true
+        };
+        request(options, function (error, response, body) {
+            if (error) throw new Error(error);
+            let parsedTrip = {};
+            try{
+                parsedTrip = this.parseDBTrip(body);
+                parsedTrip.trip_id = trip_id;
+                this.setState(parsedTrip);
+                this.calculate_distance()
+            } catch(e){
+                parsedTrip.trip_id = trip_id;
+                this.setState(parsedTrip);
+            }
+
+        }.bind(this));
+    }
+
+    parseDBTrip(body){
+        let parsedTrip = body;
+        parsedTrip.origin_obj.lat = parseFloat(parsedTrip.origin_obj.lat);
+        parsedTrip.origin_obj.lng = parseFloat(parsedTrip.origin_obj.lng);
+        parsedTrip.destination_obj.lat = parseFloat(parsedTrip.destination_obj.lat);
+        parsedTrip.destination_obj.lng = parseFloat(parsedTrip.destination_obj.lng);
+        parsedTrip.waypoints_db_obj = body.waypoints;
+        delete parsedTrip.waypoints;
+        parsedTrip.waypoints = [];
+        for (let waypoint in parsedTrip.waypoints_db_obj){
+            parsedTrip.waypoints_db_obj[waypoint] = {
+                lat: parseFloat(parsedTrip.waypoints_db_obj[waypoint].lat),
+                lng: parseFloat(parsedTrip.waypoints_db_obj[waypoint].lng)
+            }
+            parsedTrip.waypoints[waypoint] = {
+                location: new this.props.google.maps.LatLng(parsedTrip.waypoints_db_obj[waypoint].lat,parsedTrip.waypoints_db_obj[waypoint].lng),
+                stopover: true
+            };
+
+        }
+        return parsedTrip
+    }
+
     handleChangeOrigin = origin_address => {
         this.setState({
             origin_address
@@ -150,7 +206,7 @@ export class MapContainer extends React.Component {
                     <Icon type="delete" theme="twoTone" twoToneColor="#eb2f96" onClick={() => console.log("DELETE STOP")}/>
                 </div>
             </InfoWindow>
-        )
+        );
         this.setState({infoWindow})
     }
 
@@ -165,42 +221,52 @@ export class MapContainer extends React.Component {
         this.calculate_distance()
     }
 
+
+
     saveTrip(){
         const trip = {
-            name: this.state.trip_name,
-            date: this.state.trip_date,
-            email: cookie.load("email"),
-            origin: {
-                address: this.state.origin_address,
-                lat: this.state.origin_obj.lat,
-                lng: this.state.origin_obj.lng,
-            },
-            destination: {
-                address: this.state.destination_address,
-                lat: this.state.destination_obj.lat,
-                lng: this.state.destination_obj.lng,
-            },
-            activities: {
-                stops: this.state.stops,
-                sort_by: this.state.sort_by,
-                price: this.state.price,
-                waypoints: this.state.waypoints_db_obj
-            }
-        }
-        console.log(trip)
+            trip_name: this.state.trip_name,
+            origin_address: this.state.origin_address,
+            destination_address: this.state.destination_address,
+            origin_obj: this.state.origin_obj,
+            destination_obj: this.state.destination_obj,
+            trip_date: this.state.trip_date,
+            price: this.state.price,
+            sort_by: this.state.sort_by,
+            stops: this.state.stops,
+            waypoints: this.state.waypoints_db_obj,
+        };
+
+        let options = {
+            method: 'POST',
+            url: 'http://localhost:8888/save-trip',
+            qs: { trip_id: this.state.trip_id, email: cookie.load("email"), user_id: cookie.load("userID")},
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            form: trip
+        };
+
+        request(options, function (error, response, body) {
+            if (error) throw new Error(error);
+
+            console.log(body);
+        });
     }
 
     render() {
-
+        console.log("STATE", this.state)
         const content = (
-            <div style={{ width: 250, border: '2px solid #d9d9d9', borderRadius: 4 }}>
-                <Calendar fullscreen={false} onChange={(date) => this.setState({trip_date: date._d.toISOString()})} />
+            <div style={{ width: 300, border: '1px solid #d9d9d9', borderRadius: 4 }}>
+                <Calendar
+                    fullscreen={false}
+                    onChange={(date) => this.setState({trip_date: date._d.toISOString()})}
+                    value={this.state.trip_date ? moment(this.state.trip_date) : moment("2019-04-11T15:13:58.867Z")}
+                />
             </div>
         )
         return (
 
             <div>
-                <Input style={{"width": "90%", "borderRight": "10px"}} placeholder={"Enter a name of your trip"} onChange={(event) => this.setState({trip_name: event.target.value})}/>
+                <Input style={{"width": "90%", "borderRight": "10px"}} placeholder={"Enter a name of your trip"} value={this.state.trip_name} onChange={(event) => this.setState({trip_name: event.target.value})}/>
                 <Popover content={content} title="Travel Date" trigger="click">
                     <Icon type="calendar" />
                 </Popover>
@@ -295,17 +361,19 @@ export class MapContainer extends React.Component {
                         <div>
                             <CheckboxGroup
                                 options={tripster_stops_1}
+                                value={this.state.stops}
                                 onChange={stops => this.setState({stops})}
                             />
                             <br/><br/>
                             <CheckboxGroup
                                 options={tripster_stops_2}
+                                value={this.state.stops}
                                 onChange={stops => this.setState({stops})}
                             />
                         </div>
                         <br/>
                         <p className={"sort-by"}>Sort By: </p>
-                        <Select defaultValue={"best_match"} style={{width: 150}} max={51} onChange={(sort_by) => this.setState({sort_by})}>
+                        <Select value={this.state.sort_by} style={{width: 150}} max={51} onChange={(sort_by) => this.setState({sort_by})}>
                             <Option value="best_match" >Best Match</Option>
                             <Option value="rating">Rating</Option>
                             <Option value="review_count">Review Count</Option>
@@ -313,7 +381,7 @@ export class MapContainer extends React.Component {
                         </Select>
                         <br/><br/>
 
-                        <Radio.Group defaultValue="1" buttonStyle="solid" onChange={price => this.setState({price: price.target.value})}>
+                        <Radio.Group value={this.state.price} buttonStyle="solid" onChange={price => this.setState({price: price.target.value})}>
                             <Radio.Button value="1">$</Radio.Button>
                             <Radio.Button value="2">$$</Radio.Button>
                             <Radio.Button value="3">$$$</Radio.Button>

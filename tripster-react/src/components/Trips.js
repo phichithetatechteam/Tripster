@@ -1,28 +1,65 @@
 import React from "react";
 import { withRouter } from 'react-router-dom';
-import { Card, Button, Menu, Dropdown } from 'antd';
+import request from 'request';
+import { Card, Button, Menu, Dropdown, Icon } from 'antd';
 import "../stylesheets/trips.css"
 import cookie from 'react-cookies'
 
-
-
 export class Trips extends React.Component {
+    constructor(props){
+        super(props)
+        this.state = {
+            trips: []
+        }
+    }
     createNewTrip(){
-        this.props.history.push("/plan-trip")
+        var options = {
+            method: 'POST',
+            url: 'http://localhost:8888/new-trip',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            form: {
+                user_id: cookie.load("userID"),
+                email: cookie.load("email"),
+            }
+        };
+        request(options, function (error, response, body) {
+            if (error) throw new Error(error);
+            const trip_id = (body.replace('"', '')).replace('"', '')
+            this.props.history.push(`/plan-trip/${trip_id}`)
+        }.bind(this));
+
+    }
+
+    deleteTrip(trip_id){
+        let options = {
+            method: 'POST',
+            url: 'http://localhost:8888/delete-trip',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            form: {
+                user_id: cookie.load("userID"),
+                email: cookie.load("email"),
+                trip_id: trip_id,
+            },
+            json: true
+        };
+
+        request(options, function (error, response, body) {
+            if (error) throw new Error(error);
+            this.setState({trips: body.data})
+        }.bind(this));
+    }
+    viewTrip(trip_id){
+        this.props.history.push(`/plan-trip/${trip_id}`)
     }
     renderTrips(){
-        let trips = []
-        const obj = {"name": "Chicago Adventure", "date": "Feb 3"}
-        trips.push(obj)
-        trips.push(obj)
-        trips.push(obj)
-        trips.push(obj)
-        const renderTrips = trips.map(trip => (
+        const renderTrips = this.state.trips.map(trip => (
             <div className="trip-item">
               <div className="card">
                 <header className="card-header has-text-centered">
                   <p className="card-header-title is-size-5 has-text-weight-light">
-                    {trip.name}
+                    {trip.trip_name}
                   </p>
                   <a href="#" className="card-header-icon" aria-label="more options">
                     <span className="icon">
@@ -32,21 +69,17 @@ export class Trips extends React.Component {
                 </header>
                 <div className="card-content">
                   <div className="content">
-                    <p className="is-size-6 has-text-weight-light">{trip.date}</p>
+                    <p className="is-size-6 has-text-weight-light">{trip.trip_date}</p>
                   </div>
                 </div>
                 <footer className="card-footer">
-                  <a href="#" className="card-footer-item">View Trip</a>
-                  <a href="#" className="card-footer-item">Delete</a>
+                  <a href="#" className="card-footer-item" onClick={() => this.viewTrip(trip._id)}>View Trip</a>
+                  <a href="#" className="card-footer-item" onClick={() => this.deleteTrip(trip._id)}>Delete</a>
                 </footer>
               </div>
             </div>
-
-
-
         ));
         const newTripCard = (
-
           <div className="trip-item">
             <div className="card">
               <header className="card-header has-text-centered">
@@ -78,6 +111,20 @@ export class Trips extends React.Component {
     componentDidMount(){
         if (!cookie.load("isLoggedIn")){
             this.props.history.push("/")
+        } else {
+            let options = {
+                method: 'GET',
+                url: 'http://localhost:8888/view-trips',
+                qs: {
+                    email: cookie.load("email"),
+                    user_id: cookie.load("userID")
+                },
+                json: true
+            };
+            request(options, function (error, response, body) {
+                if (error) throw new Error(error);
+                this.setState({trips: body.data})
+            }.bind(this));
         }
     }
 
@@ -110,7 +157,7 @@ export class Trips extends React.Component {
               <nav className="navbar" role="navigation" aria-label="main navigation">
                 <div className="navbar-brand">
                   <a className="navbar-item">
-                      <img src="https://github.com/lrisTech/Tripster/blob/master/tripster-react/src/images/tripster.png?raw=true"/>
+                      <img alt="" src="https://github.com/lrisTech/Tripster/blob/master/tripster-react/src/images/tripster.png?raw=true"/>
                   </a>
                 </div>
                 <div className="navbar-menu">
@@ -128,13 +175,10 @@ export class Trips extends React.Component {
 
             </div>
 
-            <div class="hero-body">
+            <div className="hero-body">
 
               <div className="trips-container">
                 {this.renderTrips()}
-
-                  <iframe class="spotify" src="https://open.spotify.com/embed/track/6u7jPi22kF8CTQ3rb9DHE7" width="325" height="450"
-                          frameBorder="0" allowTransparency="true" allow="encrypted-media"></iframe>
               </div>
 
             </div>
