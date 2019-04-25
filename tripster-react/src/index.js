@@ -10,8 +10,8 @@ import * as serviceWorker from './serviceWorker';
 ReactDOM.render(
     <BrowserRouter>
         <Switch>
-            <Route exact path="/trips" component={Trips} />
             <Route exact path="/plan-trip" component={App} />
+            <Route exact path="/trips" component={Trips} />
             <Route path="/" component={Home} />
         </Switch>
     </BrowserRouter>,

@@ -2,6 +2,7 @@ import React from "react";
 import FacebookLogin from 'react-facebook-login';
 import { withRouter } from 'react-router-dom';
 import cookie from 'react-cookies'
+import request from 'request'
 
 export class Home extends React.Component {
 
@@ -19,19 +20,33 @@ export class Home extends React.Component {
 
 
     responseFacebook(response) {
-        cookie.save('isLoggedIn', true)
-        cookie.save('userID', response.userID)
-        cookie.save('name', response.name)
-        cookie.save('email', response.email)
-        cookie.save('picture', response.picture.data.url)
-        this.setState({
-            isLoggedIn: true,
-            userID: response.userID,
-            name: response.name,
-            email: response.email,
-            picture: response.picture.data.url
-        });
-        this.props.history.push('/trips');
+        var options = { method: 'POST',
+            url: 'http://localhost:8888/authenticate',
+            headers:
+                { 'Content-Type': 'application/x-www-form-urlencoded' },
+            form:
+                { email: response.email,
+                    name: response.name,
+                    picture: response.picture.data.url,
+                    user_id: response.userID
+                } };
+
+        request(options, function (error, resp, body) {
+            cookie.save('isLoggedIn', true)
+            cookie.save('userID', response.userID)
+            cookie.save('name', response.name)
+            cookie.save('email', response.email)
+            cookie.save('picture', response.picture.data.url)
+            this.setState({
+                isLoggedIn: true,
+                userID: response.userID,
+                name: response.name,
+                email: response.email,
+                picture: response.picture.data.url
+            });
+            this.props.history.push('/trips');;
+        }.bind(this));
+
     }
 
     componentDidMount(){
@@ -48,7 +63,7 @@ export class Home extends React.Component {
                     <nav className="navbar" role="navigation" aria-label="main navigation">
                         <div className="navbar-brand">
                             <a className="navbar-item">
-                                <img src="https://github.com/lrisTech/Tripster/blob/master/tripster-react/src/images/tripster.png?raw=true"/>
+                                <img alt="" src="https://github.com/lrisTech/Tripster/blob/master/tripster-react/src/images/tripster.png?raw=true"/>
 
                             </a>
                         </div>
@@ -99,7 +114,7 @@ export class Home extends React.Component {
 
                     <div class="column is-4">
                         <h1 class="has-text-centered">
-                            <img src="https://images-na.ssl-images-amazon.com/images/I/61m0oPPL%2BKL._SX466_.jpg"/>
+                            <img alt="" src="https://images-na.ssl-images-amazon.com/images/I/61m0oPPL%2BKL._SX466_.jpg"/>
                         </h1>
                     </div>
 

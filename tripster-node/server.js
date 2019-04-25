@@ -1,34 +1,25 @@
-// npm packages
 const express = require('express')
 const fs = require('fs')
 const mongoClient = require('mongodb').MongoClient
+var ObjectID = require('mongodb').ObjectID;
 var cors = require('cors')
 var request = require("request");
-
 var clientid = '682367fe3a8a41a0b81f34dc5c6fe936'
 var clientsecret = '96b5123b508a42f4b450b9b600341ab6'
 var bodyParser = require('body-parser');
-
-
 const dbFunctions = require('./functions/db_functions')
-const databaseConnection = JSON.parse(fs.readFileSync('./mongo_settings.json', 'utf8'))
 const url = "mongodb+srv://pctzetatechteam:chiragiscool@tripster-602op.gcp.mongodb.net/test?retryWrites=true"; //connection path to gcp mongo instance
-// constants
 const app = express()
 app.use(cors())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
-
-// start express server
 const server = app.listen(8888, () => console.log('Listening on Port 8888'))
 module.exports = server
 
 app.get('/status', function (req, res) {
 	res.send("app is running")
-})
+});
 
-// Retrieves username, first name, last name, age if the user exists in the data source.
-//test for mongo server
 app.get('/testdb', function(req,res){
     const response = dbFunctions.retrieve_data_by_id(mongoClient, url, 'Tripster', 'accounts') //temporary location of local db
     response.then(function (resp) {
@@ -37,27 +28,67 @@ app.get('/testdb', function(req,res){
         res.send(error)
     })
 })
-app.post('/save-trip', function(req, res){
-    if (!req.body._id){
-        const response = dbFunctions.insert_trip_data(mongoClient, url, 'Tripster', 'trips', req.body);
-        response.then(function(resp){
-            res.send(resp.data.insertedId)
+
+app.post('/new-trip', function (req, res) {
+    const user_id = req.body.user_id;
+    const email = req.body.email;
+    const response = dbFunctions.doesAccountExist(mongoClient, url, 'Tripster', 'accounts', user_id, email);
+    response.then(function(doesAccountExist){
+        if (doesAccountExist){
+            const resp = dbFunctions.create_new_trip(mongoClient, url, 'Tripster', 'trips', user_id, email);
+            resp.then(function (trip_id) {
+                res.send(trip_id)
+            })
+        } else {
+            res.send("NO ACCOUNT EXISTS, STOP TRYING TO HACK ME")
+        }
+    })
+});
+
+app.post('/delete-trip', function (req, res) {
+    const user_id = req.body.user_id;
+    const email = req.body.email;
+    const trip_id = new ObjectID(req.body.trip_id);
+    const response = dbFunctions.delete_trip(mongoClient, url, 'Tripster', 'trips', user_id, email, trip_id);
+    response.then(function(message){
+        const resp = dbFunctions.view_trips(mongoClient, url, 'Tripster', 'trips', email, user_id);
+        resp.then(function(trips){
+            res.send({data: trips})
         })
-    } else { //id does exsist from front-end
-        //update to trips only if the id and email exists
-        res.send("UPDATE TO TRIPS ONLY IF THE ID AND EMAIL EXISTS ")
-    }
-    // const response = dbFunctions.post_trip_data(mongoClient, url, 'Tripster', 'trips', req.body);
-    // response.then(function(resp){
-    //     res.status(resp.status)
-    //     res.send(resp.message)
-    // }).catch(function (error){
-    //     res.send(error)
-    // })
-})
+    })
+});
+
+app.post('/save-trip', function(req, res){
+    const _id = new ObjectID(req.query.trip_id);
+    const email = req.query.email;
+    const user_id = req.query.user_id;
+    const response = dbFunctions.save_trip(mongoClient, url, 'Tripster', 'trips', _id, email, user_id, req.body);
+    response.then(function(message){
+        res.send(message)
+    })
+});
+
+app.get('/view-trips', function(req, res){
+    const email = req.query.email;
+    const user_id = req.query.user_id;
+    const response = dbFunctions.view_trips(mongoClient, url, 'Tripster', 'trips', email, user_id);
+    response.then(function(trips){
+        res.send({data: trips})
+    })
+});
+
+app.get('/view-trip', function(req, res){
+    const email = req.query.email;
+    const user_id = req.query.user_id;
+    const trip_id = new ObjectID(req.query.trip_id);
+    const response = dbFunctions.view_trip(mongoClient, url, 'Tripster', 'trips', email, user_id, trip_id);
+    response.then(function(trip){
+        res.send(trip)
+    })
+});
+
 app.post('/authenticate', function(req, res){
     const response = dbFunctions.post_new_profile_entity(mongoClient, url, 'Tripster', 'accounts', req.body.name, req.body.email, req.body.picture, req.body.user_id);
-
     response.then(function(resp){
         res.status(resp.status)
         res.send(resp.message)
@@ -179,39 +210,21 @@ app.get('/top-10', function(req,res){
     let finalAccess;
 
     accessTokenPromise.then(access_token => {
-        console.log(access_token)
         finalAccess = access_token;
         var uid = getUserid(finalAccess)
             uid.then(id => {
-                //console.log(id)
                 var playlistObj = createPlaylist(id['id'], finalAccess)
                 playlistObj.then( playlist => {
                         var top_songs = topTen(access_token)
                         top_songs.then( tenSongs => {
-                            //console.log(playlist)
-                            //console.log(makePlaylist(tenSongs))
                             var finalPlaylist = addSongs(makePlaylist(tenSongs), playlist['id'], finalAccess)
                             finalPlaylist.then(final =>{
-                                //console.log(final)
-                                console.log(playlist.id)
                                 res.send({'playlist_id':playlist.id,'user_id': id['id']})
 
                             })
                         })
                     })
             })
-
-
-
-
-    //     var y = topTen(access_token)
-    //         y.then(top_songs => {
-    //             //console.log(top_songs)
-    //             let top_10_uris = makePlaylist(top_songs);
-    //             res.send({data:top_10_uris});
-    // })
-
-
     });
 });
 
@@ -231,7 +244,6 @@ function addSongs (track_uri, playlist_id, access_token){
 
     return new Promise(function(resolve, reject) {
         request(options, function (error, response, body) {
-            //console.log(body);
             resolve(body);
         });
     });
@@ -251,7 +263,6 @@ function createPlaylist(userid, access_token) {
 
     return new Promise(function(resolve, reject) {
         request(options, function (error, response, body) {
-            //console.log(body);
             resolve(body);
         });
     });
@@ -271,7 +282,6 @@ function getUserid(access_token) {
 
     return new Promise(function(resolve, reject) {
         request(options, function (error, response, body) {
-            //console.log(body);
             resolve(body);
         });
     });
@@ -324,27 +334,12 @@ function topTen(access_token){
     });
 }
 
-// var x = spotifunkRocks('AQDkcEWI0LY8KA8GuxvubvdGv3b-sHiZDKPzu-Va3LNplAI0_LpclhgVyJizE_yDy-rLrq48XtjF6oXVzTPIjDDPEk60oSkXoCivtGfwTTK8KahdrUPdOsrqNkf__BoPZLbALA')
-// x.then(access_token => {
-//     //console.log(access_token)
-//     var y = topTen(access_token)
-//     y.then(top_songs => {
-//         console.log(top_songs)
-//         console.log(makePlaylist(top_songs));
-//     })
-//
-// })
-
-
-
 function makePlaylist(x) {
     let obj = JSON.parse(x);
     var items = obj['items'];
-    //console.log(items);
     var uris = [];
     for (var i = 0; i < obj['total']; i++){
         var currUri = items[i]['uri'];
-        console.log(currUri)
         uris.push(currUri)
     }
     return uris

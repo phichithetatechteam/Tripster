@@ -1,5 +1,5 @@
 import React from "react";
-import {Button} from "antd";
+import {Button, Card} from "antd";
 import querystring from "querystring";
 import {withRouter} from 'react-router-dom';
 import request from 'request';
@@ -38,7 +38,7 @@ export class Spotifunk extends React.Component {
     componentDidMount() {
         const parsedQuery = querystring.parse(this.props.location.search);
         const queryRefreshToken = parsedQuery['?refresh_token'];
-        if (queryRefreshToken != undefined) {
+        if (queryRefreshToken !== undefined) {
             this.setState({'refreshToken':queryRefreshToken});
         }
     }
@@ -62,7 +62,7 @@ export class Spotifunk extends React.Component {
                 let embed_url = `https://open.spotify.com/embed/user/${body.user_id}/playlist/${body.playlist_id}`
                 // src="https://open.spotify.com/embed/user/1215854297/playlist/0aAotlEvLxpi4QgWk97CZK"
                 finalPlaylist = (
-                    <iframe src={embed_url} width="300" height="380"
+                    <iframe title="playlist" src={embed_url} width="300" height="380"
                             frameBorder="0" allowTransparency="true" allow="encrypted-media"></iframe>
                 )
                 this.setState({renderedSongs:finalPlaylist, isTopTenClicked: true})
@@ -79,7 +79,7 @@ export class Spotifunk extends React.Component {
             this.setState({renderedPlaylist:"", isPlaylistClicked: false})
         } else {
             let playlist = (
-                <iframe src="https://open.spotify.com/embed/user/1215854297/playlist/0aAotlEvLxpi4QgWk97CZK" width="280"
+                <iframe title="public-playlist" src="https://open.spotify.com/embed/user/1215854297/playlist/0aAotlEvLxpi4QgWk97CZK" width="280"
                         height="380" frameBorder="0" allowTransparency="true" allow="encrypted-media"></iframe>)
             this.setState({renderedPlaylist:playlist, isPlaylistClicked: true})
         }
@@ -88,7 +88,6 @@ export class Spotifunk extends React.Component {
     }
 
     render() {
-        console.log(this.state)
         if (this.state.refreshToken) {
             return (
                 <div>

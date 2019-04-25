@@ -1,9 +1,3 @@
-// npm packages
-const uuidv1 = require('uuid/v1')
-
-// import files
-const validation = require('./input_validation')
-
 function isMongoConnected (err) {
   if (err) {
     console.log('Unable to connect to MongoDB\nPlease ensure mongod is running and the url is correct')
@@ -17,20 +11,12 @@ module.exports = {
     return new Promise(function (resolve, reject) {
       mongoClient.connect(dbURL, { useNewUrlParser: true }, function (err, client) {
         if (isMongoConnected(err)) {
-          // Connect to database and collection
           const db = client.db(dbName)
           const collection = db.collection(dbCollection)
-
-          // Generates uuid timestamp
-          const uuid = uuidv1()
-
-          // Validates Inputs
-          //if (validation.isValidUserName(userName) && validation.isValidFirstOrLastName(firstName) && validAge(age)) {
             collection.findOne({user_id}, function (collectionError, document) {
               if (collectionError) {
                 reject(collectionError)
               }
-              // if username not in collection - insert
               if (document === null) {
                 collection.insertOne({name, user_id, email, picture})
                 resolve({ 'status': 200, 'message': {name, user_id, email, picture} }) // ok
@@ -46,70 +32,93 @@ module.exports = {
       })
     })
   },
-    insert_trip_data: function (mongoClient, dbURL, dbName, dbCollection,body) {
+    save_trip: function (mongoClient, dbURL, dbName, dbCollection, _id, email, user_id, body) {
+        return new Promise(function (resolve, reject) {
+            mongoClient.connect(dbURL, { useNewUrlParser: true }, function (err, client) {
+                if (isMongoConnected(err)) {
+                    const db = client.db(dbName);
+                    const collection = db.collection(dbCollection);
+                    const query = {"_id": _id, "email": email, "user_id": user_id};
+                    console.log("Query", query);
+                    console.log("BODY", body);
+                    collection.updateOne(query, {$set: body}, {upsert: true}, function(err, resp) {
+                        resolve("Your trip has been saved");
+                    });
+                }
+            })
+        })
+    },
+    view_trip: function (mongoClient, dbURL, dbName, dbCollection, email, user_id, trip_id) {
+        return new Promise(function (resolve, reject) {
+            mongoClient.connect(dbURL, { useNewUrlParser: true }, function (err, client) {
+                if (isMongoConnected(err)) {
+                    const db = client.db(dbName);
+                    const collection = db.collection(dbCollection);
+                    collection.findOne({email, user_id, _id: trip_id}).then(trip => {
+                        resolve(trip)
+                    })
+                }
+            })
+        })
+    },
+    view_trips: function (mongoClient, dbURL, dbName, dbCollection, email, user_id) {
+        return new Promise(function (resolve, reject) {
+            mongoClient.connect(dbURL, { useNewUrlParser: true }, function (err, client) {
+                if (isMongoConnected(err)) {
+                    const db = client.db(dbName);
+                    const collection = db.collection(dbCollection);
+                    collection.find({email, user_id}).toArray(function(err, result) {
+                        resolve(result);
+                    });
+                }
+            })
+        })
+    },
+    doesAccountExist: function (mongoClient, dbURL, dbName, dbCollection, user_id, email) {
         return new Promise(function (resolve, reject) {
             mongoClient.connect(dbURL, { useNewUrlParser: true }, function (err, client) {
                 if (isMongoConnected(err)) {
                     const db = client.db(dbName)
                     const collection = db.collection(dbCollection)
-                    collection.insertOne(body).then(resp => {
-                        resolve({ 'status': 200, 'data': resp })
-                    })
-
+                    db.collection("accounts").findOne({"email": email, "user_id": user_id}, function (collectionError, document) {
+                        if (document == null) {
+                            resolve(false)
+                        } else {
+                            resolve(true)
+                        }
+                    });
                 }
             })
         })
     },
-  post_trip_data: function (mongoClient, dbURL, dbName, dbCollection,body) {
-    return new Promise(function (resolve, reject) {
-      mongoClient.connect(dbURL, { useNewUrlParser: true }, function (err, client) {
-        if (isMongoConnected(err)) {
-          // Connect to database and collection
-          const db = client.db(dbName)
-          const collection = db.collection(dbCollection)
-
-          collection.findOne({"_id":body._id, "email":body.email}, function (collectionError, document) {
-            if (collectionError) {
-              reject(collectionError)
-            }
-            // if username not in collection - insert
-            if (document === null) {
-              collection.insertOne(body)
-              resolve({ 'status': 200, 'message': {success} }) // ok
-            } else { // username already in collection -
-              collection.updateOne({"_id":body._id, "email":body.email}, {$set:body} )
-              resolve({ 'status': 409, 'message': 'updated value' })
-            }
-          })
-          //} else { // Invalid Input
-          //resolve({ 'status': 422, 'message': 'Invalid Parameters' }) // unprocessable entity
-          //}
-        }
-      })
-    })
-  },
-  retrieve_data_by_id: function (mongoClient, dbURL, dbName, dbCollection, uuid) {
-    return new Promise(function (resolve, reject) {
-      mongoClient.connect(dbURL, { useNewUrlParser: true }, function (err, client) {
-        if (isMongoConnected(err)) {
-          // Connect to database and collection
-          const db = client.db(dbName)
-          const collection = db.collection(dbCollection)
-          collection.findOne({ uuid }, function (collectionError, document) {
-            if (collectionError) {
-              reject(collectionError)
-            }
-            // if uuid not in collection - 404
-            if (document === null) {
-              resolve({ 'status': 404, 'message': 'UUID Not Found' }) // not found
-            } else { // uuid in collection - display data
-              delete document._id // do not show _id
-              delete document.uuid // do not uuid
-              resolve({ 'status': 200, 'message': document }) //  okay
-            }
-          })
-        }
-      })
-    })
-  }
-}
+    create_new_trip: function (mongoClient, dbURL, dbName, dbCollection, user_id, email) {
+        return new Promise(function (resolve, reject) {
+            mongoClient.connect(dbURL, { useNewUrlParser: true }, function (err, client) {
+                if (isMongoConnected(err)) {
+                    const db = client.db(dbName)
+                    const collection = db.collection(dbCollection)
+                    db.collection("trips").insertOne({"email": email, "user_id": user_id}).then(resp => {
+                        resolve(resp.insertedId)
+                    })
+                }
+            })
+        })
+    },
+    delete_trip: function (mongoClient, dbURL, dbName, dbCollection, user_id, email, trip_id) {
+        return new Promise(function (resolve, reject) {
+            mongoClient.connect(dbURL, { useNewUrlParser: true }, function (err, client) {
+                if (isMongoConnected(err)) {
+                    const db = client.db(dbName)
+                    const collection = db.collection(dbCollection)
+                    db.collection("trips").deleteOne({"email": email, "user_id": user_id, "_id": trip_id}, function (collectionError, document) {
+                        if (document.deletedCount == 0) {
+                            resolve("Trip does not exist")
+                        } else {
+                            resolve("Trip has been deleted")
+                        }
+                    });
+                }
+            })
+        })
+    }
+};
