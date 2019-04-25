@@ -61,7 +61,7 @@ export class Trips extends React.Component {
                   <p className="card-header-title is-size-5 has-text-weight-light">
                     {trip.trip_name}
                   </p>
-                  <a href="#" className="card-header-icon" aria-label="more options">
+                  <a href="" className="card-header-icon" aria-label="more options">
                     <span className="icon">
                       <i className="fas fa-angle-down" aria-hidden="true"></i>
                     </span>
@@ -73,8 +73,8 @@ export class Trips extends React.Component {
                   </div>
                 </div>
                 <footer className="card-footer">
-                  <a href="#" className="card-footer-item" onClick={() => this.viewTrip(trip._id)}>View Trip</a>
-                  <a href="#" className="card-footer-item" onClick={() => this.deleteTrip(trip._id)}>Delete</a>
+                  <a href="" className="card-footer-item" onClick={() => this.viewTrip(trip._id)}>View Trip</a>
+                  <a href="" className="card-footer-item" onClick={() => this.deleteTrip(trip._id)}>Delete</a>
                 </footer>
               </div>
             </div>
@@ -86,7 +86,7 @@ export class Trips extends React.Component {
                 <p className="card-header-title is-size-5 has-text-weight-light">
                   Add a new trip!
                 </p>
-                <a href="#" className="card-header-icon" aria-label="more options">
+                <a href="" className="card-header-icon" aria-label="more options">
                     <span className="icon">
                       <i className="fas fa-angle-down" aria-hidden="true"></i>
                     </span>

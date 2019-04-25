@@ -53,7 +53,8 @@ export class MapContainer extends React.Component {
         };
     }
     componentDidMount(){
-        const trip_id = this.props.history.location.pathname.split("/")[2]
+        const trip_id = this.props.history.location.pathname.split("/")[2];
+        console.log(trip_id)
         var options = {
             method: 'GET',
             url: 'http://localhost:8888/view-trip',
@@ -79,6 +80,7 @@ export class MapContainer extends React.Component {
 
         }.bind(this));
     }
+
 
     parseDBTrip(body){
         let parsedTrip = body;
@@ -278,6 +280,7 @@ export class MapContainer extends React.Component {
 
                     <Card class="is-size-1"
                         title="Tripster Stops"
+                        extra={<Icon type="save" theme="twoTone"onClick={() => this.saveTrip()}/>}
                     >
                         <PlacesAutocomplete
                             value={this.state.origin_address}
@@ -422,7 +425,6 @@ export class MapContainer extends React.Component {
 
 
             </div>
-                <Button onClick={() => this.saveTrip()} className={"save-trip-button bottom-button"}>Save Trip</Button>
             </div>
 
 
