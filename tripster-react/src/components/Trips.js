@@ -55,46 +55,53 @@ export class Trips extends React.Component {
     }
     renderTrips(){
         const renderTrips = this.state.trips.map(trip => (
-            <div className="trip-item" key={trip._id}>
-                <Card
-                    type="inner"
-                    style={{
-                        backgroundColor: '#CDC29E',
-                        width: '323.5px',
-                        height: '130px',
-                        textAlign: 'center',
-                        margin: '0px',
-                        borderRadius: '10px',
-                    }}
-                    key={trip._id}
-                >
-
-                    <p className="trip-name is-family-primary">{trip.trip_name}</p>
-                    <p className="trip-content is-family-secondary">{trip.trip_date}</p>
-                    <Button className="is-family-primary" onClick={() => this.viewTrip(trip._id)}>View Trip</Button>
-                    <Icon type="delete" onClick={() => this.deleteTrip(trip._id)}/>
-                </Card>
+            <div className="trip-item">
+              <div className="card">
+                <header className="card-header has-text-centered">
+                  <p className="card-header-title is-size-5 has-text-weight-light">
+                    {trip.trip_name}
+                  </p>
+                  <a href="#" className="card-header-icon" aria-label="more options">
+                    <span className="icon">
+                      <i className="fas fa-angle-down" aria-hidden="true"></i>
+                    </span>
+                  </a>
+                </header>
+                <div className="card-content">
+                  <div className="content">
+                    <p className="is-size-6 has-text-weight-light">{trip.trip_date}</p>
+                  </div>
+                </div>
+                <footer className="card-footer">
+                  <a href="#" className="card-footer-item" onClick={() => this.viewTrip(trip._id)}>View Trip</a>
+                  <a href="#" className="card-footer-item" onClick={() => this.deleteTrip(trip._id)}>Delete</a>
+                </footer>
+              </div>
             </div>
         ));
         const newTripCard = (
-            <div className="trip-item" >
-                <Card
-                    type="inner"
-                    bordered={true}
-                    style={{
-                        backgroundColor: '#add8e6',
-                        width: '300px',
-                        textAlign: 'center',
-                        margin: '0px',
-                        borderRadius: '10px',
-                        borderStyle: 'dashed !important'
-                    }}
-                >
-                    <p className="trip-name has-text-weight-bold has-text-white-bis is-size-4">+</p>
-                    <h1> </h1>
-                    <Button onClick={() => this.createNewTrip()}>Create a New Trip</Button>
-                </Card>
+          <div className="trip-item">
+            <div className="card">
+              <header className="card-header has-text-centered">
+                <p className="card-header-title is-size-5 has-text-weight-light">
+                  Add a new trip!
+                </p>
+                <a href="#" className="card-header-icon" aria-label="more options">
+                    <span className="icon">
+                      <i className="fas fa-angle-down" aria-hidden="true"></i>
+                    </span>
+                </a>
+              </header>
+              <div className="card-content">
+                <div className="content">
+                  <p className="is-size-6 has-text-weight-light">+</p>
+                </div>
+              </div>
+              <footer className="card-footer">
+                <a onClick={() => this.createNewTrip()} className="card-footer-item">Click here to add a new trip!</a>
+              </footer>
             </div>
+          </div>
         )
 
         renderTrips.push(newTripCard)

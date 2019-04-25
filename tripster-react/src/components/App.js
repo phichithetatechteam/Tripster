@@ -264,6 +264,7 @@ export class MapContainer extends React.Component {
             </div>
         )
         return (
+
             <div>
                 <Input style={{"width": "90%", "borderRight": "10px"}} placeholder={"Enter a name of your trip"} value={this.state.trip_name} onChange={(event) => this.setState({trip_name: event.target.value})}/>
                 <Popover content={content} title="Travel Date" trigger="click">
@@ -384,13 +385,17 @@ export class MapContainer extends React.Component {
                             <Radio.Button value="1">$</Radio.Button>
                             <Radio.Button value="2">$$</Radio.Button>
                             <Radio.Button value="3">$$$</Radio.Button>
-                            <Radio.Button value="4">$$$</Radio.Button>
+                            <Radio.Button value="4">$$$$</Radio.Button>
                         </Radio.Group>
+
+                        <p></p>
 
                         <Button onClick={() => this.calculate_distance()}>Calculate</Button>
 
                     </Card>
-                    <Spotifunk/>
+
+                        <Spotifunk/>
+
                 </div>
 
                 <div className="flex-container-div-right">
@@ -405,8 +410,8 @@ export class MapContainer extends React.Component {
                             path={this.state.steps}
                             geodesic={false}
                             strokeColor="#0000FF"
-                            strokeOpacity={4}
-                            strokeWeight={10}
+                            strokeOpacity={3}
+                            strokeWeight={8}
                         />
                         {this.state.infoWindow}
 
@@ -417,8 +422,9 @@ export class MapContainer extends React.Component {
 
 
             </div>
-                <Button onClick={() => this.saveTrip()} className={"save-trip-button"}>Save Trip</Button>
+                <Button onClick={() => this.saveTrip()} className={"save-trip-button bottom-button"}>Save Trip</Button>
             </div>
+
 
         );
     }
