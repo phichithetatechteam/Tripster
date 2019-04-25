@@ -51,10 +51,7 @@ export class Trips extends React.Component {
         }.bind(this));
     }
     viewTrip(trip_id){
-        this.props.history.push({
-            pathname: '/plan-trip',
-            search: `?trip_id=${trip_id}`
-        })
+        this.props.history.push(`/plan-trip/${trip_id}`)
     }
     renderTrips(){
         const renderTrips = this.state.trips.map(trip => (

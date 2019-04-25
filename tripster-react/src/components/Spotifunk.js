@@ -3,6 +3,7 @@ import {Button, Card} from "antd";
 import querystring from "querystring";
 import {withRouter} from 'react-router-dom';
 import request from 'request';
+import cookie from "react-cookies";
 
 
 export class Spotifunk extends React.Component {
@@ -39,6 +40,7 @@ export class Spotifunk extends React.Component {
         const parsedQuery = querystring.parse(this.props.location.search);
         const queryRefreshToken = parsedQuery['?refresh_token'];
         if (queryRefreshToken !== undefined) {
+            // TODO: fix this
             this.setState({'refreshToken':queryRefreshToken});
         }
     }
