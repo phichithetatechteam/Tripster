@@ -2,6 +2,7 @@ import React from "react";
 import {Card, Button, Icon, Collapse} from 'antd';
 import { withRouter } from 'react-router-dom';
 import '../stylesheets/steps.css'
+import {backendURL} from "../dependency";
 
 const Panel = Collapse.Panel;
 

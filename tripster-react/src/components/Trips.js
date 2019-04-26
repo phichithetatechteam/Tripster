@@ -4,6 +4,7 @@ import request from 'request';
 import { Card, Button, Menu, Dropdown, Icon } from 'antd';
 import "../stylesheets/trips.css"
 import cookie from 'react-cookies'
+import {backendURL} from "../dependency";
 
 export class Trips extends React.Component {
     constructor(props){
@@ -15,7 +16,7 @@ export class Trips extends React.Component {
     createNewTrip(){
         var options = {
             method: 'POST',
-            url: 'http://localhost:8888/new-trip',
+            url: `${backendURL}/new-trip`,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
@@ -35,7 +36,7 @@ export class Trips extends React.Component {
     deleteTrip(trip_id){
         let options = {
             method: 'POST',
-            url: 'http://localhost:8888/delete-trip',
+            url: `${backendURL}/delete-trip`,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             form: {
                 user_id: cookie.load("userID"),
@@ -114,7 +115,7 @@ export class Trips extends React.Component {
         } else {
             let options = {
                 method: 'GET',
-                url: 'http://localhost:8888/view-trips',
+                url: `${backendURL}/view-trips`,
                 qs: {
                     email: cookie.load("email"),
                     user_id: cookie.load("userID")

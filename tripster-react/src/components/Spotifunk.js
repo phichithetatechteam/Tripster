@@ -4,6 +4,7 @@ import querystring from "querystring";
 import {withRouter} from 'react-router-dom';
 import request from 'request';
 import cookie from "react-cookies";
+import {backendURL} from "../dependency";
 
 
 export class Spotifunk extends React.Component {
@@ -32,7 +33,7 @@ export class Spotifunk extends React.Component {
                 response_type: 'code',
                 client_id: '682367fe3a8a41a0b81f34dc5c6fe936',
                 scope,
-                redirect_uri: 'http://localhost:8888/callback' ,
+                redirect_uri: `${backendURL}/callback` ,
                 state})
             })}`, '_self');
     }
@@ -48,7 +49,7 @@ export class Spotifunk extends React.Component {
     getTopTenSongs(){
         var options = { method: 'GET',
             json:true,
-            url: 'http://localhost:8888/top-10',
+            url: `${backendURL}/top-10`,
             qs: { refreshToken: this.state.refreshToken },
             headers:
                 { 'Postman-Token': '87b33f0a-d49f-42cc-b4f6-e8ec657df404',

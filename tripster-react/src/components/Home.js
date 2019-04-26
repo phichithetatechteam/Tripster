@@ -3,6 +3,7 @@ import FacebookLogin from 'react-facebook-login';
 import { withRouter } from 'react-router-dom';
 import cookie from 'react-cookies'
 import request from 'request'
+import {backendURL} from "../dependency";
 
 export class Home extends React.Component {
 
@@ -21,7 +22,7 @@ export class Home extends React.Component {
 
     responseFacebook(response) {
         var options = { method: 'POST',
-            url: 'http://localhost:8888/authenticate',
+            url: `${backendURL}/authenticate`,
             headers:
                 { 'Content-Type': 'application/x-www-form-urlencoded' },
             form:

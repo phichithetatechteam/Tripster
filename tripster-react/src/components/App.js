@@ -11,7 +11,8 @@ import request from 'request'
 import Spotifunk from "./Spotifunk";
 import Steps from "./Steps";
 import cookie from "react-cookies";
-import moment from 'moment'
+import moment from 'moment';
+import {backendURL} from "../dependency";
 
 const CheckboxGroup = Checkbox.Group;
 const Option = Select.Option;
@@ -57,7 +58,7 @@ export class MapContainer extends React.Component {
         console.log(trip_id)
         var options = {
             method: 'GET',
-            url: 'http://localhost:8888/view-trip',
+            url: `${backendURL}/view-trip`,
             qs: {
                 email: cookie.load('email'),
                 user_id: cookie.load('userID'),
@@ -161,7 +162,7 @@ export class MapContainer extends React.Component {
 
 
         var options = { method: 'GET',
-            url: 'http://localhost:8888/calculate-distance',
+            url: `${backendURL}/calculate-distance`,
             qs: {
                 origin_lat: this.state.origin_obj.lat,
                 origin_lng: this.state.origin_obj.lng,
@@ -241,7 +242,7 @@ export class MapContainer extends React.Component {
 
         let options = {
             method: 'POST',
-            url: 'http://localhost:8888/save-trip',
+            url: `${backendURL}/save-trip`,
             qs: { trip_id: this.state.trip_id, email: cookie.load("email"), user_id: cookie.load("userID")},
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             form: trip
