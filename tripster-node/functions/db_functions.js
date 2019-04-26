@@ -39,8 +39,6 @@ module.exports = {
                     const db = client.db(dbName);
                     const collection = db.collection(dbCollection);
                     const query = {"_id": _id, "email": email, "user_id": user_id};
-                    console.log("Query", query);
-                    console.log("BODY", body);
                     collection.updateOne(query, {$set: body}, {upsert: true}, function(err, resp) {
                         resolve("Your trip has been saved");
                     });

@@ -16,18 +16,12 @@ app.use(bodyParser.urlencoded({extended:true}));
 const server = app.listen(8888, () => console.log('Listening on Port 8888'))
 module.exports = server
 
+const back_url = 'http://localhost:8888';
+const front_url = 'http://localhost:3000';
+
 app.get('/status', function (req, res) {
 	res.send("app is running")
 });
-
-app.get('/testdb', function(req,res){
-    const response = dbFunctions.retrieve_data_by_id(mongoClient, url, 'Tripster', 'accounts') //temporary location of local db
-    response.then(function (resp) {
-        res.send(resp.message)
-    }).catch(function (error) {
-        res.send(error)
-    })
-})
 
 app.post('/new-trip', function (req, res) {
     const user_id = req.body.user_id;
@@ -156,7 +150,7 @@ app.get('/spotifunk', function(req, res){
         code: code,
         url: 'https://accounts.spotify.com/api/token',
         form: {
-            redirect_uri: 'http://localhost:8888/callback',
+            redirect_uri: `${back_url}/callback`,
             grant_type: 'authorization_code'
         },
         headers: {
@@ -172,7 +166,7 @@ app.get('/spotifunk', function(req, res){
         } else {
             refresh_token = "invalid refresh token";
         }
-        res.redirect(`http://localhost:3000/plan-trip?refresh_token=${refresh_token}`)
+        res.redirect(`${front_url}/plan-trip?refresh_token=${refresh_token}`)
     });
 
 })
@@ -184,7 +178,7 @@ app.get('/callback', function(req, res){
         url: 'https://accounts.spotify.com/api/token',
         form: {
             code: code,
-            redirect_uri: 'http://localhost:8888/callback',
+            redirect_uri: `${back_url}/callback`,
             grant_type: 'authorization_code'
         },
         headers: {
@@ -199,7 +193,7 @@ app.get('/callback', function(req, res){
         } else {
             refresh_token = "invalid refresh token";
         }
-        res.redirect(`${'http://localhost:3000/plan-trip'}?refresh_token=${refresh_token}`)
+        res.redirect(`${front_url}/plan-trip?refresh_token=${refresh_token}`)
     });
 });
 
