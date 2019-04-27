@@ -16,10 +16,10 @@ app.use(bodyParser.urlencoded({extended:true}));
 const server = app.listen(8888, () => console.log('Listening on Port 8888'))
 module.exports = server
 
-//const back_url = 'http://localhost:8888';
-//const front_url = 'http://localhost:3000';
-const back_url = 'ec2-18-221-120-72.us-east-2.compute.amazonaws.com:8888';
-const front_url = 'http://tripster-react.s3-website.us-east-2.amazonaws.com/';
+const back_url = 'http://localhost:8888';
+const front_url = 'http://localhost:3000';
+// const back_url = 'ec2-18-221-120-72.us-east-2.compute.amazonaws.com:8888';
+// const front_url = 'http://tripster-react.s3-website.us-east-2.amazonaws.com/';
 
 app.get('/status', function (req, res) {
 	res.send("app is running")
