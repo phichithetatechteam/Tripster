@@ -54,8 +54,7 @@ export class MapContainer extends React.Component {
         };
     }
     componentDidMount(){
-        const trip_id = this.props.history.location.pathname.split("/")[2];
-        console.log(trip_id)
+        const trip_id = this.props.history.location.search.split("?trip_id=")[1]
         var options = {
             method: 'GET',
             url: `${backendURL}/view-trip`,

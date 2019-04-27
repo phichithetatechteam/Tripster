@@ -28,7 +28,7 @@ export class Trips extends React.Component {
         request(options, function (error, response, body) {
             if (error) throw new Error(error);
             const trip_id = (body.replace('"', '')).replace('"', '')
-            this.props.history.push(`/plan-trip/${trip_id}`)
+            this.props.history.push(`/plan-trip?trip_id=${trip_id}`)
         }.bind(this));
 
     }
@@ -52,7 +52,7 @@ export class Trips extends React.Component {
         }.bind(this));
     }
     viewTrip(trip_id){
-        this.props.history.push(`/plan-trip/${trip_id}`)
+        this.props.history.push(`/plan-trip?trip_id=${trip_id}`)
     }
     renderTrips(){
         const renderTrips = this.state.trips.map(trip => (

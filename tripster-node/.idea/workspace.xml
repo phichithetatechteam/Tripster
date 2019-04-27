@@ -3,16 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ade53b2f-a07b-4425-8ad2-159353c0c44b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/functions/db_functions.js" beforeDir="false" afterPath="$PROJECT_DIR$/functions/db_functions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/functions/input_validation.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/to import/postman endpoints.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/to import/user profiles.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../tripster-react/src/components/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tripster-react/src/components/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tripster-react/src/components/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tripster-react/src/components/Home.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tripster-react/src/components/Spotifunk.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tripster-react/src/components/Spotifunk.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tripster-react/src/components/Steps.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tripster-react/src/components/Steps.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../tripster-react/src/components/Trips.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tripster-react/src/components/Trips.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../tripster-react/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tripster-react/src/index.js" afterDir="false" />
     </list>
@@ -29,14 +20,15 @@
     <session id="1906520151">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
+          <entry key="project.closed" value="2" />
+          <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.4" value="1" />
-          <entry key="project.opened" value="1" />
+          <entry key="project.opened" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts">
         <counts>
-          <entry key="ESLintLanguageService" value="1" />
+          <entry key="ESLintLanguageService" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -51,32 +43,32 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="js" value="80" />
+          <entry key="js" value="82" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JavaScript" value="80" />
+          <entry key="JavaScript" value="82" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/functions/db_functions.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="11" column="18" lean-forward="true" selection-start-line="10" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
+            <state relative-caret-position="165">
+              <caret line="11" column="18" selection-start-line="10" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="15" column="30" selection-start-line="15" selection-start-column="26" selection-end-line="15" selection-end-column="30" />
+            <state relative-caret-position="176">
+              <caret line="19" column="19" selection-start-line="19" selection-start-column="19" selection-end-line="19" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -95,6 +87,8 @@
       <find>front_url</find>
       <find>localhost:300</find>
       <find>8888</find>
+      <find>888</find>
+      <find>localhost</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -122,11 +116,11 @@
       <path value="$PROJECT_DIR$/package.json" />
     </packageJsonPaths>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="1">
     <option name="x" value="1280" />
-    <option name="y" value="91" />
-    <option name="width" value="1703" />
-    <option name="height" value="917" />
+    <option name="y" value="23" />
+    <option name="width" value="1600" />
+    <option name="height" value="825" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -184,18 +178,19 @@
       <workItem from="1555772983265" duration="183000" />
       <workItem from="1556113388563" duration="13735000" />
       <workItem from="1556209588165" duration="1599000" />
-      <workItem from="1556316639726" duration="1769000" />
+      <workItem from="1556316639726" duration="3231000" />
+      <workItem from="1556396450366" duration="641000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="28361000" />
+    <option name="totallyTimeSpent" value="30464000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1280" y="91" width="1703" height="917" extended-state="0" />
+    <frame x="1280" y="23" width="1600" height="825" extended-state="1" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18668252" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1861938" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -209,7 +204,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.23272727" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.2319236" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -245,20 +240,18 @@
     <entry file="file://$PROJECT_DIR$/mongo_settings.json">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/functions/input_validation.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server.js">
+    <entry file="file://$PROJECT_DIR$/functions/input_validation.js" />
+    <entry file="file://$PROJECT_DIR$/functions/db_functions.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="15" column="30" selection-start-line="15" selection-start-column="26" selection-end-line="15" selection-end-column="30" />
+        <state relative-caret-position="165">
+          <caret line="11" column="18" selection-start-line="10" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/functions/db_functions.js">
+    <entry file="file://$PROJECT_DIR$/server.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="11" column="18" lean-forward="true" selection-start-line="10" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
+        <state relative-caret-position="176">
+          <caret line="19" column="19" selection-start-line="19" selection-start-column="19" selection-end-line="19" selection-end-column="19" />
         </state>
       </provider>
     </entry>

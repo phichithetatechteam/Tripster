@@ -12,7 +12,7 @@ import * as serviceWorker from './serviceWorker';
 ReactDOM.render(
     <BrowserRouter>
         <Switch>
-            <Route path="/plan-trip/:trip_id" component={App} />
+            <Route exact path="/plan-trip" component={App} />
             <Route exact path="/trips" component={Trips} />
             <Route path="/" component={Home} />
         </Switch>
