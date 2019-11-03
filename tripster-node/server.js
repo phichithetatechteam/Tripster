@@ -203,24 +203,24 @@ app.get('/top-10', function(req,res){
     let refreshToken = req.query.refreshToken || null;
     let accessTokenPromise = spotifunkRocks(refreshToken);
 
-    let finalAccess;
-
     accessTokenPromise.then(access_token => {
         finalAccess = access_token;
         var uid = getUserid(finalAccess)
-            uid.then(id => {
-                var playlistObj = createPlaylist(id['id'], finalAccess)
-                playlistObj.then( playlist => {
-                        var top_songs = topTen(access_token)
-                        top_songs.then( tenSongs => {
-                            var finalPlaylist = addSongs(makePlaylist(tenSongs), playlist['id'], finalAccess)
-                            finalPlaylist.then(final =>{
-                                res.send({'playlist_id':playlist.id,'user_id': id['id']})
-
-                            })
+        uid.then(id => {
+            var playlistObj = createPlaylist(id['id'], finalAccess)
+            playlistObj.then( playlist => {
+                var top_songs = topTen(finalAccess)
+                top_songs.then( tenSongs => {
+                    var songList = makePlaylist(tenSongs)
+                    songList.then(sL => {
+                        var finalPlaylist = addSongs(sL, playlist['id'], finalAccess)
+                        finalPlaylist.then(final =>{
+                            res.send({'playlist_id':playlist.id,'user_id': id['id']})
                         })
                     })
+                })
             })
+        })
     });
 });
 
@@ -271,10 +271,8 @@ function getUserid(access_token) {
         json: true,
         url: 'https://api.spotify.com/v1/me',
         headers:
-            { 'Postman-Token': 'e51da337-9c1b-4aec-86f0-71eecc8ecdca',
-                'cache-control': 'no-cache',
-                Authorization: `Bearer ${access_token}`,
-                scope: 'user-read-email user-read-private user-read-birthdate' } };
+            {   Authorization: `Bearer ${access_token}`,
+                scope: 'user-read-email user-read-private user-read-birthdate user-top-read' } };
 
     return new Promise(function(resolve, reject) {
         request(options, function (error, response, body) {
@@ -313,14 +311,11 @@ function spotifunkRocks(refresh_token) {
 }
 
 function topTen(access_token){
-    var headers = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${access_token}`
-    };
     var options = {
         method: 'GET',
-        headers: headers,
+        headers: {
+            Authorization: `Bearer ${access_token}`
+        },
         url: `https://api.spotify.com/v1/me/top/tracks?limit=10`,
     };
     return new Promise(function(resolve, reject) {
@@ -331,14 +326,18 @@ function topTen(access_token){
 }
 
 function makePlaylist(x) {
-    let obj = JSON.parse(x);
-    var items = obj['items'];
-    var uris = [];
-    for (var i = 0; i < obj['total']; i++){
-        var currUri = items[i]['uri'];
-        uris.push(currUri)
-    }
-    return uris
+    return new Promise(function(resolve, reject){
+        let obj = JSON.parse(x);
+        var items = obj['items'];
+        var uris = [];
+        for (var i = 0; i < obj['total']; i++){
+            if (typeof items[i] != 'undefined'){
+                var currUri = items[i]['uri'];
+                uris.push(currUri)
+            }
+        }
+        resolve(uris)
+    })
 }
 
 
